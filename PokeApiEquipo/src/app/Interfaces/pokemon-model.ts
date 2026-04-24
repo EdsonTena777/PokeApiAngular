@@ -1,4 +1,7 @@
 export interface Pokemon {
-  IdPokemon: number;
-  NombreRol: string;
+  name: string,
+  url: string,
+  idPokemon: number,
+  imagen: string,
+  flipped?: boolean,
 }

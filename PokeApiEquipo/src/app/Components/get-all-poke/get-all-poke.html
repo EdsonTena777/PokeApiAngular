@@ -1,24 +1,108 @@
+<!-- Cargar Bootstrap CSS en tu <head> -->
+<link href="https://jsdelivr.net" rel="stylesheet">
 
-<div class="tarjeta-pokedex">
-  
-  <div class="marco-pantalla">
-    <div class="datos-cabecera">
-      <span class="nombre">Bulbasaur</span>
-      <span class="numero">no. 1</span>
-    </div>
-    
-    <div class="visor-pokemon">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="Bulbasaur">
-    </div>
+<div class="container mt-4">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="carta-volteada" (click)="presionaCarta()" [class.flipped]="voltea">
+        <div class="carta-volteada-dentro">
+          <div class="carta-volteada-frente">
+            <div class="tarjeta-pokedex">
+              <div class="marco-pantalla">
+                <div class="datos-cabecera">
+                  <span class="nombre">Bulbasaur</span>
+                  <span class="numero">no. 1</span>
+                </div>
+                <div class="visor-pokemon">
+                  <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
+                    alt="Bulbasaur">
+                </div>
+                <div class="controles-inferiores">
+                  <div class="genero">macho</div>
+                  <button class="boton-favorito">favorito</button>
+                  <div class="recargar">↺</div>
+                </div>
+              </div>
+              <div class="caja-descripcion">
+                <p>Planta / veneno</p>
+              </div>
+            </div>
+          </div>
+          <div class="carta-volteada-atras">
+            <div class="tarjeta-pokedex">
+              <div class="marco-pantalla-atras">
+                <div class="datos-cabecera">
+                  <span class="nombre">Data Extra</span>
+                </div>                
+                <div class="visor-pokemon" style="font-size: 0.7rem">
+                  <table class="table table-sm table-borderless m-0 tabla-custom">
+                    <thead>
+                      <tr>
+                        <th>Stat</th>
+                        <th>Base</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>PS</td><td>45</td></tr>
+                      <tr><td>Ataque</td><td>49</td></tr>
+                      <tr><td>Defensa</td><td>49</td></tr>
+                      <tr><td>Atq. Esp</td><td>65</td></tr>
+                      <tr><td>Def. Esp</td><td>65</td></tr>
+                      <tr><td>Velocidad</td><td>45</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="caja-descripcion">
+                <p>no se que mas</p>
+              </div>
+            </div>
+          </div>
 
-    <div class="controles-inferiores">
-      <div class="genero">macho</div>
-      <button class="boton-favorito">favorito</button>
-      <div class="recargar">↺</div>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="caja-descripcion">
-    <p></p>
+    <div class="col-md-4">
+      <div class="tarjeta-pokedex">
+        <div class="marco-pantalla">
+          <div class="datos-cabecera">
+            <span class="nombre">Charmander</span>
+            <span class="numero">no. 4</span>
+          </div>
+          <div class="visor-pokemon">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Charmander">
+          </div>
+          <div class="controles-inferiores">
+            <div class="genero">macho</div>
+            <button class="boton-favorito">favorito</button>
+            <div class="recargar">↺</div>
+          </div>
+        </div>
+        <div class="caja-descripcion">
+          <p>Descripción Charmander</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="tarjeta-pokedex">
+        <div class="marco-pantalla">
+          <div class="datos-cabecera">
+            <span class="nombre">Squirtle</span>
+            <span class="numero">no. 7</span>
+          </div>
+          <div class="visor-pokemon">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" alt="Squirtle">
+          </div>
+          <div class="controles-inferiores">
+            <div class="genero">macho</div>
+            <button class="boton-favorito">favorito</button>
+            <div class="recargar">↺</div>
+          </div>
+        </div>
+        <div class="caja-descripcion">
+          <p>Descripción Squirtle</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

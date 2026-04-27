@@ -91,11 +91,13 @@
 }
 
 .carta-volteada {
-  perspective: 1000px;
+  perspective: 500px;
   height: 450px; 
+  cursor: default;
+}
+
+.boton-favorito, .recargar {
   cursor: pointer;
-  -webkit-backface-visibility: hidden; 
-  backface-visibility: hidden;
 }
 
 .carta-volteada-dentro {

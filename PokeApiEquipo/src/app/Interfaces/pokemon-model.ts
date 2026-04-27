@@ -4,4 +4,10 @@ export interface Pokemon {
   idPokemon: number,
   imagen: string,
   flipped?: boolean,
+  hp: string,
+  attack: string,
+  defense: string,
+  specialAttack: string,
+  specialDefense: string,
+  speed: string
 }

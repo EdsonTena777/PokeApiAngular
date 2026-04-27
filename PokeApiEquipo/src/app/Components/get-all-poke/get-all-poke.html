@@ -1,24 +1,84 @@
-
-<div class="tarjeta-pokedex">
-  
-  <div class="marco-pantalla">
-    <div class="datos-cabecera">
-      <span class="nombre">Bulbasaur</span>
-      <span class="numero">no. 1</span>
-    </div>
-    
-    <div class="visor-pokemon">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="Bulbasaur">
-    </div>
-
-    <div class="controles-inferiores">
-      <div class="genero">macho</div>
-      <button class="boton-favorito">favorito</button>
-      <div class="recargar">↺</div>
-    </div>
+<div class="container mt-4">
+  <div class="paginacion">
+    <button (click)="anteriorPagina()" [disabled]="paginaActual === 1">Anterior</button>
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+    <button (click)="siguientePagina()" [disabled]="paginaActual === totalPaginas">Siguiente</button>
   </div>
-
-  <div class="caja-descripcion">
-    <p></p>
+  <div class="row g-3">
+    @for (pokemon of pokemones; track pokemon.idPokemon) {
+      <div class="col-md-4">
+        <div class="carta-volteada" [class.flipped]="pokemon.flipped">
+          <div class="carta-volteada-dentro">            
+            <div class="carta-volteada-frente">
+              <div class="tarjeta-pokedex">
+                <div class="marco-pantalla">
+                  <div class="datos-cabecera">
+                    <span class="nombre">{{ pokemon.name | titlecase }}</span>
+                    <span class="numero">no. {{ pokemon.idPokemon }}</span>
+                  </div>
+                  <div class="visor-pokemon">
+                    <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.idPokemon + '.png'"
+                      [alt]="pokemon.name">
+                  </div>
+                  <div class="controles-inferiores">
+                    <div class="genero">machoo</div>
+                    <button class="boton-favorito">Favoritos</button>
+                    <div class="recargar" (click)="toggleFlip(pokemon, $event)" style="cursor: pointer;">↺</div>
+                  </div>
+                </div>
+                <div class="caja-descripcion">
+                  <p>ID: {{ pokemon.idPokemon }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="carta-volteada-atras">
+              <div class="tarjeta-pokedex">
+                <div class="marco-pantalla-atras">
+                  <div class="datos-cabecera">
+                    <span class="nombre">Info Extra</span>
+                  </div>                
+                  <div class="visor-pokemon">
+                    <div class="contenedor-stats">
+                      <table class="tabla-stats">
+                        <tbody>
+                          <tr>
+                            <td>HP</td>
+                            <td class="valor">{{ pokemon.hp }}</td>
+                          </tr>
+                          <tr>
+                            <td>Ataque</td>
+                            <td class="valor">{{ pokemon.attack }}</td>
+                          </tr>
+                          <tr>
+                            <td>Defensa</td>
+                            <td class="valor">{{pokemon.defense}}</td>
+                          </tr>
+                          <tr>
+                            <td>At. Esp.</td>
+                            <td class="valor">{{pokemon.specialAttack}}</td>
+                          </tr>
+                          <tr>
+                            <td>Def. Esp.</td>
+                            <td class="valor">{{pokemon.specialDefense}}</td>
+                          </tr>
+                          <tr>
+                            <td>Velocidad</td>
+                            <td class="valor">{{pokemon.speed}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>
+                </div>
+                <div class="caja-descripcion">
+                  <p>Ver más detalles...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
   </div>
 </div>

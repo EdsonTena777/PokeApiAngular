@@ -3,7 +3,7 @@ import { PokemonService } from '../../Services/pokemon-service';
 import { Pokemon } from '../../Interfaces/pokemon-model';
 import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core'
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -29,6 +29,7 @@ export class GetAllPoke {
   }
 
   public pokemones: Pokemon[] = [];
+  public cachePokemon: Pokemon[] = [];
 
   private pokemonService = inject(PokemonService);
 
@@ -38,7 +39,8 @@ export class GetAllPoke {
   };
 
 
-  limit: number = 20;
+  limit: number = 100;
+  limitfuera : number = 20;
   offset: number = 0;
   paginaActual: number = 1;
   totalPaginas: number = 0;
@@ -53,6 +55,8 @@ export class GetAllPoke {
           idPokemon: parseInt(p.url.split('/').filter(Boolean).pop() || '0'),
           flipped: false
         }));
+
+
 
         this.totalPaginas = Math.ceil(data.count / this.limit);
         this.paginaActual = Math.floor(this.offset / this.limit) + 1;
@@ -76,49 +80,46 @@ export class GetAllPoke {
           this.pokemones[index].specialDefense = objeto.stats[4].base_stat;
           this.pokemones[index].speed = objeto.stats[5].base_stat;
 
+
         })
+        this.cachePokemon.push(...this.pokemones);
+        console.log("pokemones con stats:", this.cachePokemon);
       }
     })
 
   }
 
-
-  // cargarPokemones() {
-  //   this.pokemonService.GetAllPoke(this.limit, this.offset).subscribe({
-  //     next: (data: any) => {
-  //       console.log('Datos recibidos:', data);
-  //       if (data && data.results) {
-  //         console.log('Datos recibidos:', data);
-  //         this.pokemones = data.results.map((p: any) => ({
-  //           name: p.name,
-  //           url: p.url,
-  //           idPokemon: parseInt(p.url.split('/').filter(Boolean).pop() || '0'),
-  //           flipped: false
-  //         }));
-
-  //         this.totalPaginas = Math.ceil(data.count / this.limit);
-  //         this.paginaActual = Math.floor(this.offset / this.limit) + 1;
-
-  //         this.cdr.detectChanges();
-  //       }
-  //     },
-  //     error: (err) => console.error('Error al cargar:', err)
-  //   });
+  // siguientePagina() {
+  //   if (this.paginaActual < this.totalPaginas) {
+  //     this.offset += this.limit;
+  //     this.paginaActual++;
+  //   }
   // }
 
+  // anteriorPagina() {
+  //   if (this.offset >= this.limit) {
+  //     this.offset -= this.limit;
+  //     this.paginaActual--;
+  //   }
+  // }
+
+  get pokemonesAMostrar() {
+    return this.cachePokemon.slice(this.offset, this.offset + this.limitfuera);
+  }
+
   siguientePagina() {
-    if (this.paginaActual < this.totalPaginas) {
-      this.offset += this.limit;
-      this.getDetalles();
+    if ((this.offset + this.limitfuera) < this.cachePokemon.length) {
+      this.offset += this.limitfuera;
     }
   }
 
   anteriorPagina() {
-    if (this.offset >= this.limit) {
-      this.offset -= this.limit;
-      this.getDetalles();
+    if (this.offset > 0) {
+      this.offset -= this.limitfuera;
     }
   }
 
 
 }
+
+

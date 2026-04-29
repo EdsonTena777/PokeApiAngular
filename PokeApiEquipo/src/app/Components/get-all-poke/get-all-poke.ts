@@ -1,14 +1,18 @@
 import { Component, inject, model } from '@angular/core';
 import { PokemonService } from '../../Services/pokemon-service';
 import { Pokemon } from '../../Interfaces/pokemon-model';
-import { TitleCasePipe } from '@angular/common';
+import { TitleCasePipe, CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core'
+<<<<<<< HEAD
 import { switchMap } from 'rxjs/operators';
+=======
+import { map, switchMap } from 'rxjs/operators';
+>>>>>>> origin/Carta-Volteada
 import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-get-all-poke',
-  imports: [TitleCasePipe],
+  imports: [TitleCasePipe, CommonModule],
   templateUrl: './get-all-poke.html',
   styleUrl: './get-all-poke.css',
 })
@@ -29,6 +33,11 @@ export class GetAllPoke {
   }
 
   public pokemones: Pokemon[] = [];
+  public cachePokemon: Pokemon[] = [];
+  public pokemonesFiltrados: Pokemon[] = [];
+  
+  public textoBusqueda: string = '';
+  public cargando: boolean = false;
 
   private pokemonService = inject(PokemonService);
 
@@ -37,8 +46,13 @@ export class GetAllPoke {
     this.getDetalles();
   };
 
+<<<<<<< HEAD
 
   limit: number = 20;
+=======
+  limit: number = 100;
+  limitfuera : number = 20;
+>>>>>>> origin/Carta-Volteada
   offset: number = 0;
   paginaActual: number = 1;
   totalPaginas: number = 0;
@@ -57,7 +71,10 @@ export class GetAllPoke {
         this.totalPaginas = Math.ceil(data.count / this.limit);
         this.paginaActual = Math.floor(this.offset / this.limit) + 1;
 
+<<<<<<< HEAD
         this.cdr.detectChanges();
+=======
+>>>>>>> origin/Carta-Volteada
 
         const requests = this.pokemones.map(pokemon =>
           this.pokemonService.GetById(pokemon.idPokemon)
@@ -77,9 +94,51 @@ export class GetAllPoke {
           this.pokemones[index].speed = objeto.stats[5].base_stat;
 
         })
+<<<<<<< HEAD
       }
     })
 
+=======
+        this.cachePokemon.push(...this.pokemones);
+        this.pokemonesFiltrados = [...this.cachePokemon];
+        this.cdr.detectChanges();
+        console.log("pokemones con stats:", this.cachePokemon);
+      }
+    })
+
+  }
+
+  // siguientePagina() {
+  //   if (this.paginaActual < this.totalPaginas) {
+  //     this.offset += this.limit;
+  //     this.paginaActual++;
+  //   }
+  // }
+
+  // anteriorPagina() {
+  //   if (this.offset >= this.limit) {
+  //     this.offset -= this.limit;
+  //     this.paginaActual
+  //   }
+  // }
+
+  enBusqueda(event: any) {
+    const term = event.target.value.toLowerCase();
+    this.textoBusqueda = term;
+    this.offset = 0;
+
+    if (!term) {
+      this.pokemonesFiltrados = [...this.cachePokemon];
+    } else {
+      this.pokemonesFiltrados = this.cachePokemon.filter(p =>
+        p.name.toLowerCase().includes(term)
+      );
+    }
+  }
+
+  get pokemonesAMostrar() {
+    return this.pokemonesFiltrados.slice(this.offset, this.offset + this.limitfuera);
+>>>>>>> origin/Carta-Volteada
   }
 
 
@@ -107,16 +166,26 @@ export class GetAllPoke {
   // }
 
   siguientePagina() {
+<<<<<<< HEAD
     if (this.paginaActual < this.totalPaginas) {
       this.offset += this.limit;
       this.getDetalles();
+=======
+    if ((this.offset + this.limitfuera) < this.cachePokemon.length) {
+      this.offset += this.limitfuera;
+>>>>>>> origin/Carta-Volteada
     }
   }
 
   anteriorPagina() {
+<<<<<<< HEAD
     if (this.offset >= this.limit) {
       this.offset -= this.limit;
       this.getDetalles();
+=======
+    if (this.offset > 0) {
+      this.offset -= this.limitfuera;
+>>>>>>> origin/Carta-Volteada
     }
   }
 

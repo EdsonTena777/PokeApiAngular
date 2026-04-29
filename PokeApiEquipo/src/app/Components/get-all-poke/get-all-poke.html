@@ -1,84 +1,94 @@
 <div class="container mt-4">
+  <div class="mb-4">
+    <input 
+      type="text" 
+      class="form-control" 
+      placeholder="Buscar por nombre" 
+      (input)="enBusqueda($event)">
+  </div>
   <div class="paginacion">
-    <button (click)="anteriorPagina()" [disabled]="paginaActual === 1">Anterior</button>
-    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+    <button (click)="anteriorPagina()" [disabled]="offset === 0">Anterior</button>
+    <span>Página  {{ (offset / limitfuera) + 1 }}</span>
     <button (click)="siguientePagina()" [disabled]="paginaActual === totalPaginas">Siguiente</button>
   </div>
-  <div class="row g-3">
-    @for (pokemon of pokemones; track pokemon.idPokemon) {
-      <div class="col-md-4">
-        <div class="carta-volteada" [class.flipped]="pokemon.flipped">
-          <div class="carta-volteada-dentro">            
-            <div class="carta-volteada-frente">
-              <div class="tarjeta-pokedex">
-                <div class="marco-pantalla">
-                  <div class="datos-cabecera">
-                    <span class="nombre">{{ pokemon.name | titlecase }}</span>
-                    <span class="numero">no. {{ pokemon.idPokemon }}</span>
-                  </div>
-                  <div class="visor-pokemon">
-                    <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.idPokemon + '.png'"
-                      [alt]="pokemon.name">
-                  </div>
-                  <div class="controles-inferiores">
-                    <div class="genero">machoo</div>
-                    <button class="boton-favorito">Favoritos</button>
-                    <div class="recargar" (click)="toggleFlip(pokemon, $event)" style="cursor: pointer;">↺</div>
-                  </div>
+  
+  <div class="row g-3 justify-content-center">
+    @for (pokemon of pokemonesAMostrar; track pokemon.idPokemon) {
+    <div class="col-md-4">
+      <div class="carta-volteada" [class.flipped]="pokemon.flipped">
+        <div class="carta-volteada-dentro">
+          <div class="carta-volteada-frente">
+            <div class="tarjeta-pokedex">
+              <div class="marco-pantalla">
+                <div class="datos-cabecera">
+                  <span class="nombre">{{ pokemon.name | titlecase }}</span>
+                  <span class="numero">no. {{ pokemon.idPokemon }}</span>
                 </div>
-                <div class="caja-descripcion">
-                  <p>ID: {{ pokemon.idPokemon }}</p>
+                <div class="visor-pokemon">
+                  <img
+                    [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.idPokemon + '.png'"
+                    [alt]="pokemon.name">
+                </div>
+                <div class="controles-inferiores">
+                  <div class="genero">machoo</div>
+                  <button class="boton-favorito">Favoritos</button>
+                  <div class="recargar" (click)="toggleFlip(pokemon, $event)" style="cursor: pointer;">↺</div>
                 </div>
               </div>
+              <div class="caja-descripcion">
+                <p>ID: {{ pokemon.idPokemon }}</p>
+              </div>
             </div>
-            <div class="carta-volteada-atras">
-              <div class="tarjeta-pokedex">
-                <div class="marco-pantalla-atras">
-                  <div class="datos-cabecera">
-                    <span class="nombre">Info Extra</span>
-                  </div>                
-                  <div class="visor-pokemon">
-                    <div class="contenedor-stats">
-                      <table class="tabla-stats">
-                        <tbody>
-                          <tr>
-                            <td>HP</td>
-                            <td class="valor">45</td>
-                          </tr>
-                          <tr>
-                            <td>Ataque</td>
-                            <td class="valor">49</td>
-                          </tr>
-                          <tr>
-                            <td>Defensa</td>
-                            <td class="valor">49</td>
-                          </tr>
-                          <tr>
-                            <td>At. Esp.</td>
-                            <td class="valor">65</td>
-                          </tr>
-                          <tr>
-                            <td>Def. Esp.</td>
-                            <td class="valor">65</td>
-                          </tr>
-                          <tr>
-                            <td>Velocidad</td>
-                            <td class="valor">45</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+          </div>
+          <div class="carta-volteada-atras">
+            <div class="tarjeta-pokedex">
+              <div class="marco-pantalla-atras">
+                <div class="datos-cabecera">
+                  <span class="nombre">Info Extra</span>
+                </div>
+                <div class="visor-pokemon">
+                  <div class="contenedor-stats">
+                    <table class="tabla-stats">
+                      <tbody>
+                        <tr>
+                          <td>HP</td>
+                          <td class="valor">{{ pokemon.hp }}</td>
+                        </tr>
+                        <tr>
+                          <td>Ataque</td>
+                          <td class="valor">{{ pokemon.attack }}</td>
+                        </tr>
+                        <tr>
+                          <td>Defensa</td>
+                          <td class="valor">{{pokemon.defense}}</td>
+                        </tr>
+                        <tr>
+                          <td>At. Esp.</td>
+                          <td class="valor">{{pokemon.specialAttack}}</td>
+                        </tr>
+                        <tr>
+                          <td>Def. Esp.</td>
+                          <td class="valor">{{pokemon.specialDefense}}</td>
+                        </tr>
+                        <tr>
+                          <td>Velocidad</td>
+                          <td class="valor">{{pokemon.speed}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                  <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>
                 </div>
-                <div class="caja-descripcion">
-                  <p>Ver más detalles...</p>
-                </div>
+                <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>
+              </div>
+              <div class="caja-descripcion">
+                <p>Ver más detalles...</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     }
+
   </div>
 </div>

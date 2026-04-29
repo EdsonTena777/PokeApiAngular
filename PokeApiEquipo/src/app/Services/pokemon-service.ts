@@ -19,10 +19,9 @@ export class PokemonService {
     return this.http.get(`${this.url}?limit=${limit}&offset=${offset}`);
   }
 
-  getImagen(): Observable<any> {
-    return this.http.get(this.url);
+    GetById(id: number): Observable<Pokemon>{
+      return this.http.get<Pokemon>(this.url + id);
   }
-
 
 
 

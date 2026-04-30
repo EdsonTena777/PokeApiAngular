@@ -3,11 +3,7 @@ import { PokemonService } from '../../Services/pokemon-service';
 import { Pokemon } from '../../Interfaces/pokemon-model';
 import { TitleCasePipe, CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core'
-<<<<<<< HEAD
-import { switchMap } from 'rxjs/operators';
-=======
 import { map, switchMap } from 'rxjs/operators';
->>>>>>> origin/Carta-Volteada
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -46,13 +42,8 @@ export class GetAllPoke {
     this.getDetalles();
   };
 
-<<<<<<< HEAD
-
-  limit: number = 20;
-=======
   limit: number = 100;
   limitfuera : number = 20;
->>>>>>> origin/Carta-Volteada
   offset: number = 0;
   paginaActual: number = 1;
   totalPaginas: number = 0;
@@ -71,10 +62,6 @@ export class GetAllPoke {
         this.totalPaginas = Math.ceil(data.count / this.limit);
         this.paginaActual = Math.floor(this.offset / this.limit) + 1;
 
-<<<<<<< HEAD
-        this.cdr.detectChanges();
-=======
->>>>>>> origin/Carta-Volteada
 
         const requests = this.pokemones.map(pokemon =>
           this.pokemonService.GetById(pokemon.idPokemon)
@@ -94,11 +81,6 @@ export class GetAllPoke {
           this.pokemones[index].speed = objeto.stats[5].base_stat;
 
         })
-<<<<<<< HEAD
-      }
-    })
-
-=======
         this.cachePokemon.push(...this.pokemones);
         this.pokemonesFiltrados = [...this.cachePokemon];
         this.cdr.detectChanges();
@@ -138,7 +120,6 @@ export class GetAllPoke {
 
   get pokemonesAMostrar() {
     return this.pokemonesFiltrados.slice(this.offset, this.offset + this.limitfuera);
->>>>>>> origin/Carta-Volteada
   }
 
 
@@ -166,27 +147,29 @@ export class GetAllPoke {
   // }
 
   siguientePagina() {
-<<<<<<< HEAD
-    if (this.paginaActual < this.totalPaginas) {
-      this.offset += this.limit;
-      this.getDetalles();
-=======
     if ((this.offset + this.limitfuera) < this.cachePokemon.length) {
       this.offset += this.limitfuera;
->>>>>>> origin/Carta-Volteada
     }
   }
 
   anteriorPagina() {
-<<<<<<< HEAD
-    if (this.offset >= this.limit) {
-      this.offset -= this.limit;
-      this.getDetalles();
-=======
     if (this.offset > 0) {
       this.offset -= this.limitfuera;
->>>>>>> origin/Carta-Volteada
     }
+  }
+
+  addFavorito(event: Event, pokemon: Pokemon) {
+    console.log('Agregando a favoritos:', pokemon);
+    this.pokemonService.addFavorito(pokemon).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        alert(`${pokemon.name} ha sido agregado a favoritos.`);
+      },
+      error: (err) => {
+        console.error('Error al agregar a favoritos:', err);
+        alert(`Error al agregar ${pokemon.name} a favoritos.`);
+      }
+    });
   }
 
 

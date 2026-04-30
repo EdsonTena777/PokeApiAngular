@@ -31,7 +31,7 @@
                 </div>
                 <div class="controles-inferiores">
                   <div class="genero">machoo</div>
-                  <button class="boton-favorito">Favoritos</button>
+                  <button class="boton-favorito" (click)="addFavorito($event, pokemon)">Favoritos</button>
                   <div class="recargar" (click)="toggleFlip(pokemon, $event)" style="cursor: pointer;">↺</div>
                 </div>
               </div>
@@ -39,45 +39,6 @@
                 <p>ID: {{ pokemon.idPokemon }}</p>
               </div>
             </div>
-<<<<<<< HEAD
-            <div class="carta-volteada-atras">
-              <div class="tarjeta-pokedex">
-                <div class="marco-pantalla-atras">
-                  <div class="datos-cabecera">
-                    <span class="nombre">Info Extra</span>
-                  </div>                
-                  <div class="visor-pokemon">
-                    <div class="contenedor-stats">
-                      <table class="tabla-stats">
-                        <tbody>
-                          <tr>
-                            <td>HP</td>
-                            <td class="valor">{{ pokemon.hp }}</td>
-                          </tr>
-                          <tr>
-                            <td>Ataque</td>
-                            <td class="valor">{{ pokemon.attack }}</td>
-                          </tr>
-                          <tr>
-                            <td>Defensa</td>
-                            <td class="valor">{{pokemon.defense}}</td>
-                          </tr>
-                          <tr>
-                            <td>At. Esp.</td>
-                            <td class="valor">{{pokemon.specialAttack}}</td>
-                          </tr>
-                          <tr>
-                            <td>Def. Esp.</td>
-                            <td class="valor">{{pokemon.specialDefense}}</td>
-                          </tr>
-                          <tr>
-                            <td>Velocidad</td>
-                            <td class="valor">{{pokemon.speed}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-=======
           </div>
           <div class="carta-volteada-atras">
             <div class="tarjeta-pokedex">
@@ -115,7 +76,6 @@
                         </tr>
                       </tbody>
                     </table>
->>>>>>> origin/Carta-Volteada
                   </div>
                 </div>
                 <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>

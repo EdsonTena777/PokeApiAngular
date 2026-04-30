@@ -13,6 +13,8 @@ export class PokemonService {
 
   private url = 'https://pokeapi.co/api/v2/pokemon/';
 
+  private urlServicio = 'http://localhost:8080/pokemon';
+
   constructor(private http: HttpClient) { }
 
   GetAllPoke(limit: number = 20, offset: number = 0): Observable<any> {
@@ -21,6 +23,10 @@ export class PokemonService {
 
     GetById(id: number): Observable<Pokemon>{
       return this.http.get<Pokemon>(this.url + id);
+  }
+
+  addFavorito(pokemon: Pokemon): Observable<any> {
+    return this.http.post(this.urlServicio + '/favorito?identificador=1', pokemon);
   }
 
 

@@ -1,0 +1,29 @@
+.pokedex-form {
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.pokeball {
+  width: 80px;
+  height: 80px;
+  border: 5px solid black;
+  border-radius: 50%;
+  background: linear-gradient(180deg, red 50%, white 50%);
+  position: relative;
+}
+
+.pokeball::before {
+  content: '';
+  position: absolute;
+  top: 35%;
+  left: 35%;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 3px solid black;
+  border-radius: 50%;
+}

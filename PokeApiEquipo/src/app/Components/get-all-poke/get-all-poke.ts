@@ -133,6 +133,18 @@ export class GetAllPoke {
       this.offset -= this.limitfuera;
     }
   }
-
+  addFavorito(event: Event, pokemon: Pokemon) {
+    console.log('Agregando a favoritos:', pokemon);
+    this.pokemonService.addFavorito(pokemon).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        alert(`${pokemon.name} ha sido agregado a favoritos.`);
+      },
+      error: (err) => {
+        console.error('Error al agregar a favoritos:', err);
+        alert(`Error al agregar ${pokemon.name} a favoritos.`);
+      }
+    });
+  }
 
 }

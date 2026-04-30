@@ -4,6 +4,7 @@ import { GetAllPoke } from '../Components/get-all-poke/get-all-poke';
 import { Observable } from 'rxjs';
 import { result } from '../Interfaces/result-model';
 import { Pokemon } from '../Interfaces/pokemon-model';
+import { UsuarioAddDTO } from '../Interfaces/usuarioAdd-model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,8 @@ import { Pokemon } from '../Interfaces/pokemon-model';
 export class PokemonService {
 
   private url = 'https://pokeapi.co/api/v2/pokemon/';
+
+  private urlServicio = 'http://localhost:8080/pokemon';
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +26,11 @@ export class PokemonService {
       return this.http.get<Pokemon>(this.url + id);
   }
 
+  addFavorito(pokemon: Pokemon): Observable<any> {
+    return this.http.post(this.urlServicio + '/favorito?identificador=1', pokemon);
+  }
 
-
-
+  addUsuario(usuario: UsuarioAddDTO): Observable<any> {
+    return this.http.post(this.urlServicio, usuario);
+  }
 }

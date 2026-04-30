@@ -1,1 +1,50 @@
-<p>add-usuario works!</p>
+<div class="container mt-5">
+  <div class="card shadow-lg border-danger">
+    <div class="card-header bg-danger text-white text-center">
+      <h2 class="title">Registrar Usuario</h2>
+    </div>
+    <div class="card-body pokedex-form">
+
+      <div class="pokeball mb-4 mx-auto"></div>
+
+      <form (ngSubmit)="agregarUsuario()">
+        <div class="row">
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Entrenador</label>
+            <input type="text" [(ngModel)]="usuario.UserName" name="UserName"
+                   class="form-control" placeholder="Ash, Misty..." />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Correo</label>
+            <input type="email" [(ngModel)]="usuario.Email" name="Email"
+                   class="form-control" placeholder="ejemplo@pokemon.com" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" [(ngModel)]="usuario.Password" name="Password"
+                   class="form-control" placeholder="••••••" />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Rol</label>
+            <select [(ngModel)]="usuario.Roles.NombreRol" name="Rol" class="form-select">
+              <option value="">Selecciona un rol</option>
+              <option value="entrenador">Entrenador</option>
+              <option value="maestro">Maestro Pokémon</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-warning w-100 fw-bold mt-3">
+          ¡Registrar en la Pokédex!
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

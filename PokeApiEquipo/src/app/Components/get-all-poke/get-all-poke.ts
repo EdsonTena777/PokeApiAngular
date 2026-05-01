@@ -136,7 +136,6 @@ export class GetAllPoke {
       this.offset -= this.limitfuera;
     }
   }
-
   addFavorito(event: Event, pokemon: Pokemon) {
     console.log('Agregando a favoritos:', pokemon);
     this.pokemonService.addFavorito(pokemon).subscribe({

@@ -4,6 +4,7 @@ import { GetAllPoke } from '../Components/get-all-poke/get-all-poke';
 import { Observable } from 'rxjs';
 import { result } from '../Interfaces/result-model';
 import { Pokemon } from '../Interfaces/pokemon-model';
+import { UsuarioAddDTO } from '../Interfaces/usuarioAdd-model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +35,7 @@ export class PokemonService {
   }
 
 
-
-
+  addUsuario(usuario: UsuarioAddDTO): Observable<any> {
+    return this.http.post(this.urlServicio, usuario);
+  }
 }

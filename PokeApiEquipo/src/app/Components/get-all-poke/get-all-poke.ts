@@ -31,6 +31,7 @@ export class GetAllPoke {
   public pokemones: Pokemon[] = [];
   public cachePokemon: Pokemon[] = [];
   public pokemonesFiltrados: Pokemon[] = [];
+  public pokemonesFavoritos: Pokemon[] = [];
   
   public textoBusqueda: string = '';
   public cargando: boolean = false;
@@ -40,6 +41,7 @@ export class GetAllPoke {
   ngOnInit(): void {
     console.log('Component initialized');
     this.getDetalles();
+    // this.getFavById(21); 
   };
 
   limit: number = 100;
@@ -123,29 +125,6 @@ export class GetAllPoke {
   }
 
 
-  // cargarPokemones() {
-  //   this.pokemonService.GetAllPoke(this.limit, this.offset).subscribe({
-  //     next: (data: any) => {
-  //       console.log('Datos recibidos:', data);
-  //       if (data && data.results) {
-  //         console.log('Datos recibidos:', data);
-  //         this.pokemones = data.results.map((p: any) => ({
-  //           name: p.name,
-  //           url: p.url,
-  //           idPokemon: parseInt(p.url.split('/').filter(Boolean).pop() || '0'),
-  //           flipped: false
-  //         }));
-
-  //         this.totalPaginas = Math.ceil(data.count / this.limit);
-  //         this.paginaActual = Math.floor(this.offset / this.limit) + 1;
-
-  //         this.cdr.detectChanges();
-  //       }
-  //     },
-  //     error: (err) => console.error('Error al cargar:', err)
-  //   });
-  // }
-
   siguientePagina() {
     if ((this.offset + this.limitfuera) < this.cachePokemon.length) {
       this.offset += this.limitfuera;
@@ -171,6 +150,23 @@ export class GetAllPoke {
       }
     });
   }
+
+/*   getFavById(id: number) {
+    this.pokemonService.getFavById(id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+         data.objects.forEach((objeto: any, index: number) => {
+          this.pokemonesFavoritos[0].idPokemon = objeto.idPokemon;
+          console.log('Pokémon favorito obtenido:', this.pokemonesFavoritos[index]);
+        }
+          
+        )},
+      error: (err) => {
+        console.error('Error al obtener Pokémon favorito:', err);
+        alert(`Error al obtener Pokémon favorito con ID ${id}.`);
+      }
+    })
+  } */
 
 
 }

@@ -12,6 +12,7 @@
 
     <div class="row g-3 justify-content-center">
       @for (pokemon of pokemonesAMostrar; track pokemon.idPokemon) {
+
       <div class="col-md-4">
         <div class="carta-volteada" [class.flipped]="pokemon.flipped">
           <div class="carta-volteada-dentro">
@@ -87,7 +88,6 @@
         </div>
       </div>
       }
-
     </div>
   </div>
 </body>

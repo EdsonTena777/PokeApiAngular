@@ -32,7 +32,7 @@ export class GetAllPoke {
   public cachePokemon: Pokemon[] = [];
   public pokemonesFiltrados: Pokemon[] = [];
   public pokemonesFavoritos: Pokemon[] = [];
-  
+
   public textoBusqueda: string = '';
   public cargando: boolean = false;
 
@@ -41,11 +41,11 @@ export class GetAllPoke {
   ngOnInit(): void {
     console.log('Component initialized');
     this.getDetalles();
-    // this.getFavById(21); 
+    this.getFavById(21);
   };
 
   limit: number = 100;
-  limitfuera : number = 20;
+  limitfuera: number = 20;
   offset: number = 0;
   paginaActual: number = 1;
   totalPaginas: number = 0;
@@ -150,22 +150,27 @@ export class GetAllPoke {
     });
   }
 
-/*   getFavById(id: number) {
+  getFavById(id: number) {
     this.pokemonService.getFavById(id).subscribe({
       next: (data: any) => {
-        console.log(data);
-         data.objects.forEach((objeto: any, index: number) => {
-          this.pokemonesFavoritos[0].idPokemon = objeto.idPokemon;
-          console.log('Pokémon favorito obtenido:', this.pokemonesFavoritos[index]);
+        console.log("data:", data);
+        this.pokemonesFavoritos = data.map((objeto: any) => ({
+          idPokemon: objeto.idPokemon,
+        }));
+          console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
+        /* data.forEach((objeto: any, index: number) => {
+          console.log("objeto.idPokemon:", objeto.idPokemon);
+          this.pokemonesFavoritos.push(objeto)
         }
-          
-        )},
+        )
+      console.log("pokemonesFavoritos:", this.pokemonesFavoritos); */
+    },
       error: (err) => {
         console.error('Error al obtener Pokémon favorito:', err);
         alert(`Error al obtener Pokémon favorito con ID ${id}.`);
       }
     })
-  } */
+  }
 
 
 }

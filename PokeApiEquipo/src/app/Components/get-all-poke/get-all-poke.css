@@ -1,12 +1,3 @@
-body {
-  background-image: url('/Assets/fondo.jpg');
-  background-size: cover;       /* Ajusta la imagen a toda la pantalla */
-  background-position: center;  /* Centra la imagen */
-  background-repeat: no-repeat; /* Evita que se repita */
-  height: 100vh;
-  margin: 0;
-}
-
 .container {
   background-image: url('https://www.transparenttextures.com/patterns/pokemon.png');
   background-size: 150px;

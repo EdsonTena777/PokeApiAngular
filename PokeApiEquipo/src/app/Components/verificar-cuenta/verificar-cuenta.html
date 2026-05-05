@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="pokedex-card">
+
+    <div class="pokeball"></div>
+
+    <h2 class="title">Verificación de cuenta</h2>
+
+    <p *ngIf="!verificado" class="text-muted">
+      Presiona el botón para activar tu cuenta de entrenador.
+    </p>
+
+    <button
+      *ngIf="!verificado"
+      class="btn btn-pokemon w-100"
+      (click)="verificarCuenta()">
+      Verificar cuenta 
+    </button>
+
+    <div *ngIf="mensaje" class="alert mt-3"
+         [ngClass]="verificado ? 'alert-success' : 'alert-danger'">
+      {{ mensaje }}
+    </div>
+
+  </div>
+</div>

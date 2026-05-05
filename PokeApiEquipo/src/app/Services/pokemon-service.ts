@@ -27,7 +27,7 @@ export class PokemonService {
   }
 
   addFavorito(pokemon: Pokemon): Observable<any> {
-    return this.http.post(this.urlServicio + '/favorito?identificador=1', pokemon);
+    return this.http.post(this.urlServicio + '/favorito?identificador=21', pokemon);
   }
 
   addUsuario(usuario: UsuarioAddDTO): Observable<any> {

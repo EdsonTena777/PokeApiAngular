@@ -28,6 +28,7 @@ export class AddUsuario {
         Correo: this.usuario.Correo,
         Password: this.usuario.Password,
         UserName: this.usuario.UserName,
+        Status: 0,
         Rol: {
           IdRol: this.usuario.Rol.IdRol
         }

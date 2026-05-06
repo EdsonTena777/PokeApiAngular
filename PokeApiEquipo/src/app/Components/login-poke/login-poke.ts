@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { PokemonService } from '../../Services/pokemon-service';
 
 @Component({
   selector: 'app-login-poke',
@@ -12,14 +14,31 @@ export class PokemonLoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) {}
+
+  private pokemonService = inject(PokemonService);
 
   login() {
-    if (this.username && this.password) {
-      this.router.navigate(['/pokedex']); 
-    } else {
-      alert('Por favor ingresa tu nombre y contraseña.');
-    }
+
+    const loginDTO = {
+      username: this.username,
+      password: this.password
+    };
+
+    this.pokemonService.login(loginDTO).subscribe({
+      next: (response) => {
+        localStorage.setItem('token', response.Token);
+
+        this.router.navigate(['/pokedex']);
+      },
+      error: (error) => {
+        if (error.status === 403) {
+          alert('Debes verificar tu correo primero');
+        } else {
+          alert('Usuario o contraseña incorrectos');
+        }
+      }
+    });
   }
   add(){
     this.router.navigate(['/addUsuario'])

@@ -16,6 +16,8 @@ export class PokemonService {
 
   private urlServicio = 'http://localhost:8080/pokemon';
 
+  private urlLogin = 'http://localhost:8080/auth/login';
+
   constructor(private http: HttpClient) { }
 
   GetAllPoke(limit: number = 20, offset: number = 0): Observable<any> {
@@ -32,5 +34,9 @@ export class PokemonService {
 
   addUsuario(usuario: UsuarioAddDTO): Observable<any> {
     return this.http.post(this.urlServicio, usuario);
+  }
+  
+  login(loginDTO: any): Observable<any> {
+    return this.http.post(this.urlLogin, loginDTO);
   }
 }

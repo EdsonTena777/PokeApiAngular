@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { PokemonService } from '../../Services/pokemon-service';
 
@@ -15,23 +16,39 @@ export class PokemonLoginComponent {
   username: string = '';
   password: string = '';
 
-  pokemonService = inject(PokemonService);
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) {}
+
+  private pokemonService = inject(PokemonService);
 
   login() {
-    if (this.username && this.password) {
-      //aqui incluye una peticion al servicio para verificar que existan las credenciales
-      this.pokemonService.getFavById
 
+    const loginDTO = {
+      username: this.username,
+      password: this.password
+    };
 
-      this.router.navigate(['/pokedex']); 
-    } else {
-      Swal.fire({
-              title: "Todos los campos son obligatorios",
+    this.pokemonService.login(loginDTO).subscribe({
+      next: (response) => {
+        localStorage.setItem('token', response.Token);
+
+        this.router.navigate(['/pokedex']);
+      },
+      error: (error) => {
+        if (error.status === 403) {
+          Swal.fire({
+              title: "Debes verificar tu correo primero",
               icon: "warning",
               draggable: true
             });
-    }
+        } else {
+          Swal.fire({
+              title: "Usuario o contraseña incorrectos",
+              icon: "error",
+              draggable: true
+            });
+        }
+      }
+    });
   }
   add(){
     this.router.navigate(['/addUsuario'])

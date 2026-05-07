@@ -29,18 +29,27 @@ export class PokemonLoginComponent {
 
     this.pokemonService.login(loginDTO).subscribe({
       next: (response) => {
-        localStorage.setItem('token', response.Token);
+        console.log('Login response:', response.object.id);
+        console.log('Login response:', response.object.key);
+        localStorage.setItem('token', response.object.key);
+        localStorage.setItem('userId', response.object.id.toString());
+
+        console.log('idusuario es: ', localStorage.getItem('userId'));
 
         this.router.navigate(['/pokedex']);
       },
       error: (error) => {
         if (error.status === 403) {
+                console.log('Login response:', loginDTO);
+
           Swal.fire({
               title: "Debes verificar tu correo primero",
               icon: "warning",
               draggable: true
             });
         } else {
+                console.log('Login response:', loginDTO);
+
           Swal.fire({
               title: "Usuario o contraseña incorrectos",
               icon: "error",

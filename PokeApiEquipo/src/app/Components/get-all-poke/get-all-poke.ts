@@ -5,10 +5,12 @@ import { TitleCasePipe, CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core'
 import { map, switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
+import { Spinner } from '../spinner/spinner';
+
 
 @Component({
   selector: 'app-get-all-poke',
-  imports: [TitleCasePipe, CommonModule],
+  imports: [TitleCasePipe, CommonModule, Spinner],
   templateUrl: './get-all-poke.html',
   styleUrl: './get-all-poke.css',
 })
@@ -41,19 +43,21 @@ export class GetAllPoke {
   ngOnInit(): void {
     console.log('Component initialized');
     this.getDetalles();
-    this.getFavById(21);
+    this.getFavById(this.idUsuario);
   };
 
-  limit: number = 100;
+  idUsuario: number = parseInt(localStorage.getItem('userId') || '0');
+  limit: number = 1025;
   limitfuera: number = 20;
   offset: number = 0;
   paginaActual: number = 1;
   totalPaginas: number = 0;
+  estacargando: boolean = true;
 
   getDetalles() {
     this.pokemonService.GetAllPoke(this.limit, this.offset).pipe(
       switchMap(data => {
-
+        
         this.pokemones = data.results.map((p: any) => ({
           name: p.name,
           url: p.url,
@@ -87,6 +91,11 @@ export class GetAllPoke {
         this.pokemonesFiltrados = [...this.cachePokemon];
         this.cdr.detectChanges();
         console.log("pokemones con stats:", this.cachePokemon);
+      },
+      complete: () => {
+        this.estacargando = false;
+        this.cdr.detectChanges(); 
+        console.log('Carga de Pokémon completada');
       }
     })
 

@@ -1,14 +1,23 @@
 <body>
   <div class="container mt-4">
-    <div class="mb-4">
-      <input type="text" class="form-control" placeholder="Buscar por nombre" (input)="enBusqueda($event)">
+    <div class="row">
+      <div class="mb-4 col-4">
+        <input type="text" class="form-control" placeholder="Buscar por pokemon..." 
+        [(ngModel)] ="busqueda" (input)="filtrarPokemones()">
+      </div>
+      <div class="col-md-8">
+        <button *ngFor="let tipo of tiposPokemon"
+                class="btn tipo-btn"
+                [class.tipo-activo]="tipoSeleccionados.includes(tipo)"
+                (click)="dosTipos(tipo)">
+          <img [src]="'assets/types/' + tipo + '.png'"
+               [alt]="tipo"
+               [title]="tipo"
+               width="28">
+        </button>
+      </div>
     </div>
-    <div class="paginacion d-flex justify-content-center align-items-center mt-4 mb-5">
-      <button class="btn btn-danger me-2" (click)="anteriorPagina()" [disabled]="offset === 0">Anterior</button>
-      <span class="badge bg-white text-dark mx-2">Página {{ (offset / limitfuera) + 1 }} de {{ totalPaginas }}</span>
-      <button class="btn btn-success ms-2" (click)="siguientePagina()"
-        [disabled]="paginaActual === totalPaginas">Siguiente</button>
-    </div>
+
 
     <div class="row g-3 justify-content-center">
       @for (pokemon of pokemonesAMostrar; track pokemon.idPokemon) {
@@ -101,6 +110,12 @@
         </div>
       </div>
       }
+    </div>
+    <div class="paginacion d-flex justify-content-center align-items-center mt-4 mb-5">
+      <button class="btn btn-danger me-2" (click)="anteriorPagina()" [disabled]="offset === 0">Anterior</button>
+      <span class="badge bg-white text-dark mx-2">Página {{ (offset / limitfuera) + 1 }} de {{ totalPaginas }}</span>
+      <button class="btn btn-success ms-2" (click)="siguientePagina()"
+        [disabled]="paginaActual === totalPaginas">Siguiente</button>
     </div>
   </div>
 

@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-get-all-poke',
-  imports: [TitleCasePipe, CommonModule],
+  imports: [TitleCasePipe, CommonModule, Spinner, FormsModule],
   templateUrl: './get-all-poke.html',
   styleUrl: './get-all-poke.css',
 })

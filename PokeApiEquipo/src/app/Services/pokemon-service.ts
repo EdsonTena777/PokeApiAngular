@@ -18,6 +18,8 @@ export class PokemonService {
   private urlServicio = 'http://localhost:8080/pokemon';
 
   private urlLogin = 'http://localhost:8080/auth/login';
+
+  private urlDesc = 'https://pokeapi.co/api/v2/pokemon-species';
   
 
   private token = localStorage.getItem('token');
@@ -51,4 +53,8 @@ addUsuario(usuario: UsuarioAddDTO): Observable < any > {
 login(loginDTO: any): Observable < any > {
   return this.http.post(this.urlLogin, loginDTO);
 }
+
+  getDescPokemon(id: number){
+    return this.http.get(`${this.urlDesc}/${id}`);
+  }
 }

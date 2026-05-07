@@ -12,8 +12,7 @@
 
     <div class="row g-3 justify-content-center">
       @for (pokemon of pokemonesAMostrar; track pokemon.idPokemon) {
-
-      <div class="col-md-4">
+      <div class="col-md-4 d-flex">
         <div class="carta-volteada" [class.flipped]="pokemon.flipped">
           <div class="carta-volteada-dentro">
             <div class="carta-volteada-frente">
@@ -29,7 +28,15 @@
                       [alt]="pokemon.name">
                   </div>
                   <div class="controles-inferiores">
-                    <div class="genero">machoo</div>
+                    <div class="genero">
+                      <img 
+                      *ngFor="let types of pokemon.types"
+                      [src]="'assets/types/' + types.type.name + '.png'" 
+                      [alt]="types.type.name"
+                      [title]="types.type.name"
+                      width="20"
+                      class="separacion"> 
+                    </div>
 
                     @if (pokemonesFavoritos.some(fav => fav.idPokemon === pokemon.idPokemon)) {
                     <button class="bg-warning bg-gradient boton-favorito" (click)="addFavorito($event, pokemon)">Favoritos</button>
@@ -43,7 +50,7 @@
                   </div>
                 </div>
                 <div class="caja-descripcion">
-                  <p>ID: {{ pokemon.idPokemon }}</p>
+                    <p>{{pokemon.descripcion}}</p>
                 </div>
               </div>
             </div>
@@ -88,7 +95,7 @@
                   <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>
                 </div>
                 <div class="caja-descripcion">
-                  <p>Ver más detalles...</p>
+                  <p>ID: {{ pokemon.idPokemon }}</p>
                 </div>
               </div>
             </div>

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Usuario } from '../../Interfaces/usuario-model';
 import { UsuarioAddDTO } from '../../Interfaces/usuarioAdd-model';
 import { PokemonService } from '../../Services/pokemon-service';
+import Swal from 'sweetalert2';
 //import { Swal } from 'sweetalert2/dist/sweetalert2.js';
 import Swal from 'sweetalert2';
 

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import { PokemonService } from '../../Services/pokemon-service';
 
 

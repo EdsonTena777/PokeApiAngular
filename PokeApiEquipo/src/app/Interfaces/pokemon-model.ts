@@ -9,5 +9,17 @@ export interface Pokemon {
   defense: string,
   specialAttack: string,
   specialDefense: string,
-  speed: string
+  speed: string,
+  types: TypeElement[],
+  descripcion: string
+}
+
+export interface TypeElement {
+  slot: number,
+  type: TypeInfo
+}
+
+export interface TypeInfo {
+  name: string,
+  url: string
 }

@@ -4,8 +4,7 @@ import { Usuario } from '../../Interfaces/usuario-model';
 import { UsuarioAddDTO } from '../../Interfaces/usuarioAdd-model';
 import { PokemonService } from '../../Services/pokemon-service';
 import Swal from 'sweetalert2';
-//import { Swal } from 'sweetalert2/dist/sweetalert2.js';
-import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-add-usuario',
@@ -41,7 +40,13 @@ export class AddUsuario {
 
       this.pokemonService.addUsuario(dto).subscribe({
         next: (response) => {
-          alert(`¡Entrenador ${this.usuario.UserName} agregado a la Pokédex!`);
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "${usuario.UserName} ha sido registrado exitosamente",
+            showConfirmButton: false,
+            timer: 1500
+          });
         },
         error: (error) => {
           if (error) {

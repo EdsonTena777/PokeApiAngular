@@ -39,11 +39,9 @@
                     </div>
 
                     @if (pokemonesFavoritos.some(fav => fav.idPokemon === pokemon.idPokemon)) {
-                    <button class="bg-warning bg-gradient boton-favorito" (click)="addFavorito($event, pokemon)">Favoritos</button>
-
+                    <button class="bg-warning bg-gradient boton-favorito" (click)="removeFavorito($event, pokemon)">Favoritos</button>
                     }@else{
                     <button class="boton-favorito" (click)="addFavorito($event, pokemon)">Favoritos</button>
-
                     }
 
                     <div class="recargar" (click)="toggleFlip(pokemon, $event)" style="cursor: pointer;">↺</div>

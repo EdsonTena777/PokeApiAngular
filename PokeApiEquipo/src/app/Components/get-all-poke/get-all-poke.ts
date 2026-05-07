@@ -1,4 +1,4 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, model, signal, Signal } from '@angular/core';
 import { PokemonService } from '../../Services/pokemon-service';
 import { Pokemon } from '../../Interfaces/pokemon-model';
 import { TitleCasePipe, CommonModule } from '@angular/common';
@@ -6,6 +6,8 @@ import { ChangeDetectorRef } from '@angular/core'
 import { map, switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Spinner } from '../spinner/spinner';
+import Swal from 'sweetalert2';
+import { SIGNAL } from '@angular/core/primitives/signals';
 
 
 @Component({
@@ -58,7 +60,7 @@ export class GetAllPoke {
   getDetalles() {
     this.pokemonService.GetAllPoke(this.limit, this.offset).pipe(
       switchMap(data => {
-        
+
         this.pokemones = data.results.map((p: any) => ({
           name: p.name,
           url: p.url,
@@ -86,7 +88,7 @@ export class GetAllPoke {
           this.pokemones[index].specialAttack = objeto.stats[3].base_stat;
           this.pokemones[index].specialDefense = objeto.stats[4].base_stat;
           this.pokemones[index].speed = objeto.stats[5].base_stat;
-          this.pokemones[index].types= objeto.types;
+          this.pokemones[index].types = objeto.types;
 
           this.pokemonService.getDescPokemon(objeto.id).subscribe({
             next: (descData: any) => {
@@ -96,6 +98,7 @@ export class GetAllPoke {
               this.pokemones[index].descripcion = descEsp?.flavor_text
                 ?.replace(/\f/g, ' ')
                 ?.replace(/\n/g, ' ');
+              this.cdr.detectChanges();
             }
           });
         })
@@ -106,7 +109,7 @@ export class GetAllPoke {
       },
       complete: () => {
         this.estacargando = false;
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
         console.log('Carga de Pokémon completada');
       }
     })
@@ -159,14 +162,44 @@ export class GetAllPoke {
   }
   addFavorito(event: Event, pokemon: Pokemon) {
     console.log('Agregando a favoritos:', pokemon);
-    this.pokemonService.addFavorito(pokemon).subscribe({
+    this.pokemonService.addFavorito(pokemon, this.idUsuario).subscribe({
       next: (response) => {
         console.log('Respuesta del servidor:', response);
-        alert(`${pokemon.name} ha sido agregado a favoritos.`);
+        this.pokemonesFavoritos = [...this.pokemonesFavoritos, pokemon];
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Pokemon agregado a favoritos",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al agregar a favoritos:', err);
         alert(`Error al agregar ${pokemon.name} a favoritos.`);
+      }
+    });
+  }
+
+  removeFavorito(event: Event, pokemon: Pokemon) {
+    console.log('Removiendo de favoritos:', pokemon);
+    this.pokemonService.removeFavorito(this.idUsuario, pokemon.idPokemon).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        this.pokemonesFavoritos = this.pokemonesFavoritos.filter(fav => fav.idPokemon !== pokemon.idPokemon);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Pokemon removido de favoritos",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al remover de favoritos:', err);
+        alert(`Error al remover ${pokemon.name} de favoritos.`);
       }
     });
   }
@@ -178,14 +211,14 @@ export class GetAllPoke {
         this.pokemonesFavoritos = data.map((objeto: any) => ({
           idPokemon: objeto.idPokemon,
         }));
-          console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
+        console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
         /* data.forEach((objeto: any, index: number) => {
           console.log("objeto.idPokemon:", objeto.idPokemon);
           this.pokemonesFavoritos.push(objeto)
         }
         )
       console.log("pokemonesFavoritos:", this.pokemonesFavoritos); */
-    },
+      },
       error: (err) => {
         console.error('Error al obtener Pokémon favorito:', err);
         alert(`Error al obtener Pokémon favorito con ID ${id}.`);

@@ -35,11 +35,13 @@ export class PokemonService {
     return this.http.get<Pokemon>(this.url + id);
   }
 
-  addFavorito(pokemon: Pokemon): Observable<any> {
-    return this.http.post(this.urlServicio + '/favorito?identificador=21', pokemon);
+  addFavorito(pokemon: Pokemon, idUsuario: number): Observable<any> {
+    return this.http.post(this.urlServicio + '/favorito?identificador=' + idUsuario, pokemon, { headers: this.headers });
   }
 
-
+  removeFavorito(idUsuario: number, identificadorPokemon: number): Observable<any> {
+    return this.http.delete(this.urlServicio + '?identificador=' + idUsuario + '&identificadorPokemon=' + identificadorPokemon, { headers: this.headers });
+  }
 
 getFavById(id: number): Observable < result < Pokemon >> {
   return this.http.get<result<Pokemon>>(this.urlServicio + '/getFav?identificador=' + id, { headers: this.headers });
@@ -47,7 +49,7 @@ getFavById(id: number): Observable < result < Pokemon >> {
 
 
 addUsuario(usuario: UsuarioAddDTO): Observable < any > {
-  return this.http.post(this.urlServicio, usuario);
+  return this.http.post(this.urlServicio, usuario, { headers: this.headers });
 }
 
 login(loginDTO: any): Observable < any > {

@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import Swal from 'sweetalert2';
 import { PokemonService } from '../../Services/pokemon-service';
 
 @Component({
@@ -32,11 +33,12 @@ export class PokemonLoginComponent {
         this.router.navigate(['/pokedex']);
       },
       error: (error) => {
-        if (error.status === 403) {
-          alert('Debes verificar tu correo primero');
-        } else {
-          alert('Usuario o contraseña incorrectos');
-        }
+        alert('Por favor ingresa tu nombre y contraseña.');
+      Swal.fire({
+              title: "Todos los campos son obligatorios",
+              icon: "warning",
+              draggable: true
+            });
       }
     });
   }

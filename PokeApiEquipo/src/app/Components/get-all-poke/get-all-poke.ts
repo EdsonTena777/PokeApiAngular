@@ -18,6 +18,7 @@ export class GetAllPoke {
 
   public idTemporal: undefined | number;
   voltea: boolean = false;
+  descripcion: string = '';
 
   presionaCarta() {
     this.voltea = !this.voltea;
@@ -42,7 +43,7 @@ export class GetAllPoke {
     this.getDetalles();
   };
 
-  limit: number = 100;
+  limit: number = 1025;
   limitfuera : number = 20;
   offset: number = 0;
   paginaActual: number = 1;
@@ -79,7 +80,18 @@ export class GetAllPoke {
           this.pokemones[index].specialAttack = objeto.stats[3].base_stat;
           this.pokemones[index].specialDefense = objeto.stats[4].base_stat;
           this.pokemones[index].speed = objeto.stats[5].base_stat;
+          this.pokemones[index].types= objeto.types;
 
+          this.pokemonService.getDescPokemon(objeto.id).subscribe({
+            next: (descData: any) => {
+              const descEsp = descData.flavor_text_entries.find(
+                (x: any) => x.language.name === 'es'
+              );
+              this.pokemones[index].descripcion = descEsp?.flavor_text
+                ?.replace(/\f/g, ' ')
+                ?.replace(/\n/g, ' ');
+            }
+          });
         })
         this.cachePokemon.push(...this.pokemones);
         this.pokemonesFiltrados = [...this.cachePokemon];
@@ -146,5 +158,7 @@ export class GetAllPoke {
       }
     });
   }
+
+  
 
 }

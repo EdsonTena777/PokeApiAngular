@@ -5,10 +5,11 @@ import { TitleCasePipe, CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core'
 import { map, switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-get-all-poke',
-  imports: [TitleCasePipe, CommonModule],
+  imports: [TitleCasePipe, CommonModule, FormsModule],
   templateUrl: './get-all-poke.html',
   styleUrl: './get-all-poke.css',
 })
@@ -35,6 +36,30 @@ export class GetAllPoke {
   
   public textoBusqueda: string = '';
   public cargando: boolean = false;
+
+  public busqueda: string = '';
+  public tipoSeleccionados: string[] = []; 
+
+  tiposPokemon: string[] = [
+    'bug',
+    'dark',
+    'dragon',
+    'electric',
+    'fairy',
+    'fighting',
+    'fire',
+    'flying',
+    'ghost',
+    'grass',
+    'ground',
+    'ice',
+    'normal',
+    'poison',
+    'psychic',
+    'rock',
+    'steel',
+    'water'
+  ];
 
   private pokemonService = inject(PokemonService);
 
@@ -116,20 +141,6 @@ export class GetAllPoke {
   //   }
   // }
 
-  enBusqueda(event: any) {
-    const term = event.target.value.toLowerCase();
-    this.textoBusqueda = term;
-    this.offset = 0;
-
-    if (!term) {
-      this.pokemonesFiltrados = [...this.cachePokemon];
-    } else {
-      this.pokemonesFiltrados = this.cachePokemon.filter(p =>
-        p.name.toLowerCase().includes(term)
-      );
-    }
-  }
-
   get pokemonesAMostrar() {
     return this.pokemonesFiltrados.slice(this.offset, this.offset + this.limitfuera);
   }
@@ -159,6 +170,37 @@ export class GetAllPoke {
     });
   }
 
-  
+  aplicarFiltros(){
+    this.pokemonesFiltrados = this.cachePokemon.filter(pokemon => {
+      const coincideBusqueda = pokemon.name.toLowerCase().includes(this.busqueda.toLowerCase());
+      const coincideTipo = this.tipoSeleccionados.length === 0 || 
+        this.tipoSeleccionados.every(tipoSeleccionado => pokemon.types.some(types => types.type.name === tipoSeleccionado));
 
+      return coincideBusqueda && coincideTipo;
+    })
+  }
+
+  filtrarPorTipo(tipo: string){
+    this.aplicarFiltros();
+  }
+
+  dosTipos(tipo: string) {
+    const existe = this.tipoSeleccionados.includes(tipo);
+
+    if (existe) {
+      this.tipoSeleccionados = this.tipoSeleccionados.filter(t => t !== tipo);
+    } else {
+      if (this.tipoSeleccionados.length < 2) {
+        this.tipoSeleccionados = [...this.tipoSeleccionados, tipo];
+      } else {
+        console.warn("Solo puedes seleccionar un máximo de 2 tipos");
+        return;
+      }
+    }
+    this.aplicarFiltros();
+  }
+
+  filtrarPokemones(){
+    this.aplicarFiltros();
+  }
 }

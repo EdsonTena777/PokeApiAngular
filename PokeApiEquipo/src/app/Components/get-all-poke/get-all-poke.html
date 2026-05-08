@@ -2,22 +2,33 @@
   <div class="container mt-4">
     <div class="row">
       <div class="mb-4 col-4">
-        <input type="text" class="form-control" placeholder="Buscar por pokemon..." 
-        [(ngModel)] ="busqueda" (input)="filtrarPokemones()">
+        <input type="text" class="form-control" placeholder="Buscar por pokemon..." [(ngModel)]="busqueda"
+          (input)="filtrarPokemones()">
       </div>
       <div class="col-md-8">
-        <button *ngFor="let tipo of tiposPokemon"
-                class="btn tipo-btn"
-                [class.tipo-activo]="tipoSeleccionados.includes(tipo)"
-                (click)="dosTipos(tipo)">
-          <img [src]="'assets/types/' + tipo + '.png'"
-               [alt]="tipo"
-               [title]="tipo"
-               width="28">
+        <button *ngFor="let tipo of tiposPokemon" class="btn tipo-btn"
+          [class.tipo-activo]="tipoSeleccionados.includes(tipo)" (click)="dosTipos(tipo)">
+          <img [src]="'assets/types/' + tipo + '.png'" [alt]="tipo" [title]="tipo" width="28">
+        </button>
+      </div>
+
+      <div class="pagination-bar">
+        <button (click)="anteriorPagina()" [disabled]="offset === 0" class="btn-nav">
+          Atras
+        </button>
+
+        <div class="page-indicator">
+          <span class="current">{{ paginaActual }}</span>
+          <span class="separator">/</span>
+          <span class="total">{{ totalPaginas }}</span>
+        </div>
+
+        <button (click)="siguientePagina()" [disabled]="(offset + limitfuera) >= pokemonesFiltrados.length"
+          class="btn-nav">
+          Siguiente
         </button>
       </div>
     </div>
-
 
     <div class="row g-3 justify-content-center">
       @for (pokemon of pokemonesAMostrar; track pokemon.idPokemon) {
@@ -38,20 +49,22 @@
                   </div>
                   <div class="controles-inferiores">
                     <div class="genero">
-                      <img 
-                      *ngFor="let types of pokemon.types"
-                      [src]="'assets/types/' + types.type.name + '.png'" 
-                      [alt]="types.type.name"
-                      [title]="types.type.name"
-                      width="20"
-                      class="separacion"> 
+                      <img *ngFor="let types of pokemon.types" [src]="'assets/types/' + types.type.name + '.png'"
+                        [alt]="types.type.name" [title]="types.type.name" width="20" class="separacion">
                     </div>
+
+                    @if (pokemonesFavoritos.some(fav => fav.idPokemon === pokemon.idPokemon)) {
+                    <button class="bg-warning bg-gradient boton-favorito"
+                      (click)="removeFavorito($event, pokemon)">Favoritos</button>
+                    }@else{
                     <button class="boton-favorito" (click)="addFavorito($event, pokemon)">Favoritos</button>
+                    }
+
                     <div class="recargar" (click)="toggleFlip(pokemon, $event)" style="cursor: pointer;">↺</div>
                   </div>
                 </div>
                 <div class="caja-descripcion">
-                    <p>{{pokemon.descripcion}}</p>
+                  <p>{{pokemon.descripcion}}</p>
                 </div>
               </div>
             </div>
@@ -62,41 +75,58 @@
                     <span class="nombre">Info Extra</span>
                   </div>
                   <div class="visor-pokemon">
-                    <div class="contenedor-stats">
-                      <table class="tabla-stats">
-                        <tbody>
-                          <tr>
-                            <td>HP</td>
-                            <td class="valor">{{ pokemon.hp }}</td>
-                          </tr>
-                          <tr>
-                            <td>Ataque</td>
-                            <td class="valor">{{ pokemon.attack }}</td>
-                          </tr>
-                          <tr>
-                            <td>Defensa</td>
-                            <td class="valor">{{pokemon.defense}}</td>
-                          </tr>
-                          <tr>
-                            <td>At. Esp.</td>
-                            <td class="valor">{{pokemon.specialAttack}}</td>
-                          </tr>
-                          <tr>
-                            <td>Def. Esp.</td>
-                            <td class="valor">{{pokemon.specialDefense}}</td>
-                          </tr>
-                          <tr>
-                            <td>Velocidad</td>
-                            <td class="valor">{{pokemon.speed}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>
+                    <div class="d-flex gap-2">
+                      <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
+                      <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
+                      <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
                     </div>
                   </div>
-                  <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>
                 </div>
                 <div class="caja-descripcion">
-                  <p>ID: {{ pokemon.idPokemon }}</p>
+                  <div class="contenedor-stats">
+                    <div class="row">
+                      <div class="col-6">
+                        <table class="tabla-stats">
+                          <tbody>
+                            <tr>
+                              <td>HP</td>
+                              <td class="valor">{{ pokemon.hp }}</td>
+                            </tr>
+                            <tr>
+                              <td>Ataque</td>
+                              <td class="valor">{{ pokemon.attack }}</td>
+                            </tr>
+                            <tr>
+                              <td>Defensa</td>
+                              <td class="valor">{{pokemon.defense}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-6">
+                        <table class="tabla-stats">
+                          <tbody>
+                            <tr>
+                              <td>At. Esp.</td>
+                              <td class="valor">{{pokemon.specialAttack}}</td>
+                            </tr>
+                            <tr>
+                              <td>Def. Esp.</td>
+                              <td class="valor">{{pokemon.specialDefense}}</td>
+                            </tr>
+                            <tr>
+                              <td>Velocidad</td>
+                              <td class="valor">{{pokemon.speed}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -104,13 +134,10 @@
         </div>
       </div>
       }
+    </div>
 
-    </div>
-    <div class="paginacion d-flex justify-content-center align-items-center mt-4 mb-5">
-      <button class="btn btn-danger me-2" (click)="anteriorPagina()" [disabled]="offset === 0">Anterior</button>
-      <span class="badge bg-white text-dark mx-2">Página {{ (offset / limitfuera) + 1 }} de {{ totalPaginas }}</span>
-      <button class="btn btn-success ms-2" (click)="siguientePagina()"
-        [disabled]="paginaActual === totalPaginas">Siguiente</button>
-    </div>
   </div>
+
+  <app-spinner *ngIf="estacargando"></app-spinner>
+
 </body>

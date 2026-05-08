@@ -1,4 +1,4 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, model, signal, Signal } from '@angular/core';
 import { PokemonService } from '../../Services/pokemon-service';
 import { Pokemon } from '../../Interfaces/pokemon-model';
 import { TitleCasePipe, CommonModule } from '@angular/common';
@@ -6,10 +6,14 @@ import { ChangeDetectorRef } from '@angular/core'
 import { map, switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { Spinner } from '../spinner/spinner';
+import Swal from 'sweetalert2';
+
+
 
 @Component({
   selector: 'app-get-all-poke',
-  imports: [TitleCasePipe, CommonModule, FormsModule],
+  imports: [TitleCasePipe, CommonModule, Spinner, FormsModule],
   templateUrl: './get-all-poke.html',
   styleUrl: './get-all-poke.css',
 })
@@ -33,7 +37,8 @@ export class GetAllPoke {
   public pokemones: Pokemon[] = [];
   public cachePokemon: Pokemon[] = [];
   public pokemonesFiltrados: Pokemon[] = [];
-  
+  public pokemonesFavoritos: Pokemon[] = [];
+
   public textoBusqueda: string = '';
   public cargando: boolean = false;
 
@@ -66,13 +71,21 @@ export class GetAllPoke {
   ngOnInit(): void {
     console.log('Component initialized');
     this.getDetalles();
+    this.getFavById(this.idUsuario);
   };
 
+  idUsuario: number = parseInt(localStorage.getItem('userId') || '0');
   limit: number = 1025;
-  limitfuera : number = 20;
+  limitfuera: number = 20;
   offset: number = 0;
-  paginaActual: number = 1;
-  totalPaginas: number = 0;
+  estacargando: boolean = true;
+  get totalPaginas(): number {
+    return Math.ceil(this.pokemonesFiltrados.length / this.limitfuera) || 1;
+  }
+
+  get paginaActual(): number {
+    return Math.floor(this.offset / this.limitfuera) + 1;
+  }
 
   getDetalles() {
     this.pokemonService.GetAllPoke(this.limit, this.offset).pipe(
@@ -84,10 +97,6 @@ export class GetAllPoke {
           idPokemon: parseInt(p.url.split('/').filter(Boolean).pop() || '0'),
           flipped: false
         }));
-
-        this.totalPaginas = Math.ceil(data.count / this.limit);
-        this.paginaActual = Math.floor(this.offset / this.limit) + 1;
-
 
         const requests = this.pokemones.map(pokemon =>
           this.pokemonService.GetById(pokemon.idPokemon)
@@ -105,7 +114,8 @@ export class GetAllPoke {
           this.pokemones[index].specialAttack = objeto.stats[3].base_stat;
           this.pokemones[index].specialDefense = objeto.stats[4].base_stat;
           this.pokemones[index].speed = objeto.stats[5].base_stat;
-          this.pokemones[index].types= objeto.types;
+          this.pokemones[index].types = objeto.types;
+          this.pokemones[index].sonido = objeto.cries.latest;
 
           this.pokemonService.getDescPokemon(objeto.id).subscribe({
             next: (descData: any) => {
@@ -115,6 +125,7 @@ export class GetAllPoke {
               this.pokemones[index].descripcion = descEsp?.flavor_text
                 ?.replace(/\f/g, ' ')
                 ?.replace(/\n/g, ' ');
+              this.cdr.detectChanges();
             }
           });
         })
@@ -122,31 +133,22 @@ export class GetAllPoke {
         this.pokemonesFiltrados = [...this.cachePokemon];
         this.cdr.detectChanges();
         console.log("pokemones con stats:", this.cachePokemon);
+      },
+      complete: () => {
+        this.estacargando = false;
+        this.cdr.detectChanges();
+        console.log('Carga de Pokémon completada');
       }
     })
 
   }
-
-  // siguientePagina() {
-  //   if (this.paginaActual < this.totalPaginas) {
-  //     this.offset += this.limit;
-  //     this.paginaActual++;
-  //   }
-  // }
-
-  // anteriorPagina() {
-  //   if (this.offset >= this.limit) {
-  //     this.offset -= this.limit;
-  //     this.paginaActual
-  //   }
-  // }
 
   get pokemonesAMostrar() {
     return this.pokemonesFiltrados.slice(this.offset, this.offset + this.limitfuera);
   }
 
   siguientePagina() {
-    if ((this.offset + this.limitfuera) < this.cachePokemon.length) {
+    if ((this.offset + this.limitfuera) < this.pokemonesFiltrados.length) {
       this.offset += this.limitfuera;
     }
   }
@@ -156,12 +158,21 @@ export class GetAllPoke {
       this.offset -= this.limitfuera;
     }
   }
+
   addFavorito(event: Event, pokemon: Pokemon) {
     console.log('Agregando a favoritos:', pokemon);
-    this.pokemonService.addFavorito(pokemon).subscribe({
+    this.pokemonService.addFavorito(pokemon, this.idUsuario).subscribe({
       next: (response) => {
         console.log('Respuesta del servidor:', response);
-        alert(`${pokemon.name} ha sido agregado a favoritos.`);
+        this.pokemonesFavoritos = [...this.pokemonesFavoritos, pokemon];
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Pokemon agregado a favoritos",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al agregar a favoritos:', err);
@@ -171,6 +182,7 @@ export class GetAllPoke {
   }
 
   aplicarFiltros(){
+    this.offset = 0;
     this.pokemonesFiltrados = this.cachePokemon.filter(pokemon => {
       const coincideBusqueda = pokemon.name.toLowerCase().includes(this.busqueda.toLowerCase());
       const coincideTipo = this.tipoSeleccionados.length === 0 || 
@@ -203,4 +215,57 @@ export class GetAllPoke {
   filtrarPokemones(){
     this.aplicarFiltros();
   }
+
+  reproducirSonido(pokemon: Pokemon){
+    if(!pokemon.sonido) return;
+
+    const audio = new Audio(pokemon.sonido);
+    audio.volume = 0.5;
+    audio.play();
+  }
+
+  removeFavorito(event: Event, pokemon: Pokemon) {
+    console.log('Removiendo de favoritos:', pokemon);
+    this.pokemonService.removeFavorito(this.idUsuario, pokemon.idPokemon).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        this.pokemonesFavoritos = this.pokemonesFavoritos.filter(fav => fav.idPokemon !== pokemon.idPokemon);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Pokemon removido de favoritos",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al remover de favoritos:', err);
+        alert(`Error al remover ${pokemon.name} de favoritos.`);
+      }
+    });
+  }
+
+  getFavById(id: number) {
+    this.pokemonService.getFavById(id).subscribe({
+      next: (data: any) => {
+        console.log("data:", data);
+        this.pokemonesFavoritos = data.map((objeto: any) => ({
+          idPokemon: objeto.idPokemon,
+        }));
+        console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
+        /* data.forEach((objeto: any, index: number) => {
+          console.log("objeto.idPokemon:", objeto.idPokemon);
+          this.pokemonesFavoritos.push(objeto)
+        }
+        )
+      console.log("pokemonesFavoritos:", this.pokemonesFavoritos); */
+      },
+      error: (err) => {
+        console.error('Error al obtener Pokémon favorito:', err);
+        alert(`Error al obtener Pokémon favorito con ID ${id}.`);
+      }
+    })
+  }
+
 }

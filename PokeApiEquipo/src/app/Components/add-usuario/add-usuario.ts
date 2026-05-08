@@ -5,6 +5,7 @@ import { UsuarioAddDTO } from '../../Interfaces/usuarioAdd-model';
 import { PokemonService } from '../../Services/pokemon-service';
 import Swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-add-usuario',
   imports: [FormsModule],
@@ -17,7 +18,7 @@ export class AddUsuario {
     UserName: '',
     Correo: '',
     Password: '',
-    Rol: { IdRol: 0, NombreRol: '' } 
+    Rol: { IdRol: 0, NombreRol: '' }
   };
 
   private pokemonService = inject(PokemonService);
@@ -35,24 +36,31 @@ export class AddUsuario {
         }
       };
 
-    console.log(dto);
+      console.log(dto);
 
       this.pokemonService.addUsuario(dto).subscribe({
         next: (response) => {
-          alert(`¡Entrenador ${this.usuario.UserName} agregado a la Pokédex!`);
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "${usuario.UserName} ha sido registrado exitosamente",
+            showConfirmButton: false,
+            timer: 1500
+          });
         },
         error: (error) => {
-           if (error) {
+          if (error) {
             Swal.fire({
               title: "Username o correo ya existen",
               icon: "error",
               draggable: true
             });
           }
+          console.log('ERROR COMPLETO:', error);
+
         }
       });
     } else {
-      alert('Por favor completa todos los campos.');
       Swal.fire({
         title: "Todos los campos son obligatorios",
         icon: "error",

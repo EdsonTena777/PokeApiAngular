@@ -153,6 +153,10 @@
     color: white;
 }
 
+.tabla-stats td {
+    padding: 6px; 
+}
+
 .marco-pantalla-atras {
   background-color: #f0f0f0;
   border: 15px solid #d1d1d1;
@@ -197,4 +201,36 @@
 
 .tipo-activo{
   border: 2px solid yellow;
+}
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 15px;
+  margin-bottom: 20px;
+}
+
+.btn-nav {
+  background: #333333;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-weight: bold;
+  font-size: 1.1rem;
+  background: #f0f0f0;
+  padding: 5px 15px;
+  border-radius: 10px;
 }

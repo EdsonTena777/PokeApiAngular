@@ -11,7 +11,8 @@ export interface Pokemon {
   specialDefense: string,
   speed: string,
   types: TypeElement[],
-  descripcion: string
+  descripcion: string,
+  sonido: string
 }
 
 export interface TypeElement {

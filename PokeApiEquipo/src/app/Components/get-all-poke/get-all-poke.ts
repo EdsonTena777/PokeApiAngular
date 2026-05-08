@@ -78,9 +78,14 @@ export class GetAllPoke {
   limit: number = 1025;
   limitfuera: number = 20;
   offset: number = 0;
-  paginaActual: number = 1;
-  totalPaginas: number = 0;
   estacargando: boolean = true;
+  get totalPaginas(): number {
+    return Math.ceil(this.pokemonesFiltrados.length / this.limitfuera) || 1;
+  }
+
+  get paginaActual(): number {
+    return Math.floor(this.offset / this.limitfuera) + 1;
+  }
 
   getDetalles() {
     this.pokemonService.GetAllPoke(this.limit, this.offset).pipe(
@@ -92,10 +97,6 @@ export class GetAllPoke {
           idPokemon: parseInt(p.url.split('/').filter(Boolean).pop() || '0'),
           flipped: false
         }));
-
-        this.totalPaginas = Math.ceil(data.count / this.limit);
-        this.paginaActual = Math.floor(this.offset / this.limit) + 1;
-
 
         const requests = this.pokemones.map(pokemon =>
           this.pokemonService.GetById(pokemon.idPokemon)
@@ -114,6 +115,7 @@ export class GetAllPoke {
           this.pokemones[index].specialDefense = objeto.stats[4].base_stat;
           this.pokemones[index].speed = objeto.stats[5].base_stat;
           this.pokemones[index].types = objeto.types;
+          this.pokemones[index].sonido = objeto.cries.latest;
 
           this.pokemonService.getDescPokemon(objeto.id).subscribe({
             next: (descData: any) => {
@@ -141,27 +143,12 @@ export class GetAllPoke {
 
   }
 
-  // siguientePagina() {
-  //   if (this.paginaActual < this.totalPaginas) {
-  //     this.offset += this.limit;
-  //     this.paginaActual++;
-  //   }
-  // }
-
-  // anteriorPagina() {
-  //   if (this.offset >= this.limit) {
-  //     this.offset -= this.limit;
-  //     this.paginaActual
-  //   }
-  // }
-
   get pokemonesAMostrar() {
     return this.pokemonesFiltrados.slice(this.offset, this.offset + this.limitfuera);
   }
 
-
   siguientePagina() {
-    if ((this.offset + this.limitfuera) < this.cachePokemon.length) {
+    if ((this.offset + this.limitfuera) < this.pokemonesFiltrados.length) {
       this.offset += this.limitfuera;
     }
   }
@@ -171,6 +158,7 @@ export class GetAllPoke {
       this.offset -= this.limitfuera;
     }
   }
+
   addFavorito(event: Event, pokemon: Pokemon) {
     console.log('Agregando a favoritos:', pokemon);
     this.pokemonService.addFavorito(pokemon, this.idUsuario).subscribe({
@@ -194,6 +182,7 @@ export class GetAllPoke {
   }
 
   aplicarFiltros(){
+    this.offset = 0;
     this.pokemonesFiltrados = this.cachePokemon.filter(pokemon => {
       const coincideBusqueda = pokemon.name.toLowerCase().includes(this.busqueda.toLowerCase());
       const coincideTipo = this.tipoSeleccionados.length === 0 || 
@@ -227,7 +216,13 @@ export class GetAllPoke {
     this.aplicarFiltros();
   }
 
+  reproducirSonido(pokemon: Pokemon){
+    if(!pokemon.sonido) return;
 
+    const audio = new Audio(pokemon.sonido);
+    audio.volume = 0.5;
+    audio.play();
+  }
 
   removeFavorito(event: Event, pokemon: Pokemon) {
     console.log('Removiendo de favoritos:', pokemon);

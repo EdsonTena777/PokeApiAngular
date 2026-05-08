@@ -31,6 +31,7 @@ export class PokemonLoginComponent {
       next: (response) => {
         console.log('Login response:', response.object.id);
         console.log('Login response:', response.object.key);
+        console.log('idusuario es: ', localStorage.getItem('userId'));
         localStorage.setItem('token', response.object.key);
         localStorage.setItem('userId', response.object.id.toString());
 

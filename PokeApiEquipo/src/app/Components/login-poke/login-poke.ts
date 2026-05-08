@@ -36,7 +36,7 @@ export class PokemonLoginComponent {
 
         console.log('idusuario es: ', localStorage.getItem('userId'));
 
-        this.router.navigate(['/pokedex']);
+        this.router.navigate(['/layout/pokedex']);
       },
       error: (error) => {
         if (error.status === 403) {

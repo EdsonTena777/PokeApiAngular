@@ -1,35 +1,30 @@
 <body>
   <div class="container mt-4">
-    <div class="row">
-      <div class="mb-4 col-4">
-        <input type="text" class="form-control" placeholder="Buscar por pokemon..." [(ngModel)]="busqueda"
-          (input)="filtrarPokemones()">
+    <div class="search-container">
+      <div class="d-flex align-items-center flex-wrap mb-3">        
+        <div class="col-3">
+          <input type="text" class="form-control" placeholder="Buscar por pokemon..." [(ngModel)]="busqueda"
+            (input)="filtrarPokemones()">
+        </div>
+        <div class="col-9">
+          <button *ngFor="let tipo of tiposPokemon" class="btn tipo-btn"
+            [class.tipo-activo]="tipoSeleccionados.includes(tipo)" (click)="dosTipos(tipo)">
+            <img [src]="'assets/types/' + tipo + '.png'" [alt]="tipo" [title]="tipo" width="28">
+          </button>
+        </div>
       </div>
-      <div class="col-md-8">
-        <button *ngFor="let tipo of tiposPokemon" class="btn tipo-btn"
-          [class.tipo-activo]="tipoSeleccionados.includes(tipo)" (click)="dosTipos(tipo)">
-          <img [src]="'assets/types/' + tipo + '.png'" [alt]="tipo" [title]="tipo" width="28">
-        </button>
-      </div>
-
       <div class="pagination-bar">
-        <button (click)="anteriorPagina()" [disabled]="offset === 0" class="btn-nav">
-          Atras
-        </button>
-
+        <button (click)="anteriorPagina()" [disabled]="offset === 0" class="btn-nav">Atras</button>
         <div class="page-indicator">
           <span class="current">{{ paginaActual }}</span>
           <span class="separator">/</span>
           <span class="total">{{ totalPaginas }}</span>
         </div>
-
-        <button (click)="siguientePagina()" [disabled]="(offset + limitfuera) >= pokemonesFiltrados.length"
-          class="btn-nav">
+        <button (click)="siguientePagina()" [disabled]="(offset + limitfuera) >= pokemonesFiltrados.length" class="btn-nav">
           Siguiente
         </button>
       </div>
     </div>
-
     <div class="row g-3 justify-content-center">
       @for (pokemon of pokemonesAMostrar; track pokemon.idPokemon) {
       <div class="col-md-4 d-flex">

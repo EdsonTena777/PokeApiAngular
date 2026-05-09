@@ -31,13 +31,12 @@ export class PokemonLoginComponent {
       next: (response) => {
         console.log('Login response:', response.object.id);
         console.log('Login response:', response.object.key);
-        console.log('idusuario es: ', localStorage.getItem('userId'));
         localStorage.setItem('token', response.object.key);
         localStorage.setItem('userId', response.object.id.toString());
 
         console.log('idusuario es: ', localStorage.getItem('userId'));
 
-        this.router.navigate(['/pokedex']);
+        this.router.navigate(['/layout/pokedex']);
       },
       error: (error) => {
         if (error.status === 403) {

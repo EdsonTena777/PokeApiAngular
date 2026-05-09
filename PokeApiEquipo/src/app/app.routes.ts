@@ -4,6 +4,7 @@ import { PokemonLoginComponent } from './Components/login-poke/login-poke';
 import { AddUsuario } from './Components/add-usuario/add-usuario';
 import { VerificarCuenta } from './Components/verificar-cuenta/verificar-cuenta';
 import { Layout } from './Components/layout/layout';
+import { RecuperarContra } from './Components/recuperar-contra/recuperar-contra';
 
 export const routes: Routes = [
   { path: 'login', component: PokemonLoginComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
 
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'verificar-cuenta', component: VerificarCuenta }
+  { path: 'verificar-cuenta', component: VerificarCuenta },
+  { path: 'recuperar-contra', component: RecuperarContra}
 ];

@@ -1,0 +1,22 @@
+<p>recuperar-contra works!</p>
+<div class="container">
+    <div class="pokedex-card">
+
+        <div class="pokeball"></div>
+
+        <h2 class="title">Recuperar contraseña</h2>
+
+        <p class="text-muted">
+            Presiona el botón para recuperar tu contraseña.
+        </p>
+
+        <input type="email" class="form-control mb-3" placeholder="Ingresa tu correo electrónico" [(ngModel)]="correo">
+
+        <button (click)="enviarRecuperarContra($event, correo)" class="btn btn-pokemon w-100">
+            Recuperar contraseña
+        </button>
+
+
+
+    </div>
+</div>

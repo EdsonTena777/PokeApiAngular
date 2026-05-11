@@ -1,0 +1,23 @@
+<p>nueva-contra works!</p>
+<div class="container">
+    <div class="pokedex-card">
+
+        <div class="pokeball"></div>
+
+        <h2 class="title">Nueva contraseña</h2>
+
+        <p class="text-muted">
+            Presiona el botón para guardar tu contraseña.
+        </p>
+
+        <input type="password" [(ngModel)]="newPassword" class="form-control mb-3" placeholder="Ingresa tu nueva contraseña">
+        <input type="password" [(ngModel)]="confirmPassword" class="form-control mb-3" placeholder="Confirma tu nueva contraseña">
+
+        <button (click)="cambiarContra($event)" class="btn btn-pokemon w-100">
+            Guardar contraseña
+        </button>
+
+
+
+    </div>
+</div>

@@ -6,22 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-
 <body>
-        <nav class="poke-navbar">
-            <div class="navbar-user">
-                Nombre del usuario
-            </div>
-
-            <div class="navbar-title">
-                Bienvenido a la PokeApi
-            </div>
-
-            <div class="navbar-actions">
-                <button class="btn-poke">Favoritos</button>
-                <button class="btn-poke danger">Cerrar sesión</button>
-            </div>
-        </nav>
+    <nav class="poke-navbar">
+        <div class="navbar-user">
+            Nombre del usuario
+        </div>
+        <div class="navbar-title">
+            Bienvenido a la PokeApi
+        </div>
+        <div class="navbar-actions">
+            <button class="btn-poke">Favoritos</button>
+            <button (click)="onLogout()" class="btn-poke danger">Cerrar sesión</button>
+        </div>
+    </nav>
     <router-outlet></router-outlet>
 </body>
 

@@ -59,6 +59,7 @@ export class PokemonLoginComponent {
       }
     });
   }
+
   add(){
     this.router.navigate(['/addUsuario'])
   }

@@ -43,14 +43,14 @@ export class PokemonService {
     return this.http.delete(this.urlServicio + '?identificador=' + idUsuario + '&identificadorPokemon=' + identificadorPokemon, { headers: this.headers });
   }
 
-getFavById(id: number): Observable < result < Pokemon >> {
-  return this.http.get<result<Pokemon>>(this.urlServicio + '/getFav?identificador=' + id, { headers: this.headers });
-}
+  getFavById(id: number): Observable < result < Pokemon >> {
+    return this.http.get<result<Pokemon>>(this.urlServicio + '/getFav?identificador=' + id, { headers: this.headers });
+  }
 
 
-addUsuario(usuario: UsuarioAddDTO): Observable < any > {
-  return this.http.post(this.urlServicio, usuario, { headers: this.headers });
-}
+  addUsuario(usuario: UsuarioAddDTO): Observable < any > {
+    return this.http.post(this.urlServicio, usuario, { headers: this.headers });
+  }
 
 login(loginDTO: any): Observable < any > {
   return this.http.post(this.urlLogin + '/login', loginDTO);
@@ -68,4 +68,8 @@ login(loginDTO: any): Observable < any > {
     return this.http.post<result<any>>(this.urlLogin + '/cambiarContra?token=' + token + '&contraNueva=' + contraNueva, null);
   }
 
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+  }
 }

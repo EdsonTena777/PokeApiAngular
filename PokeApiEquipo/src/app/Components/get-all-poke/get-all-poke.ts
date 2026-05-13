@@ -8,12 +8,14 @@ import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Spinner } from '../spinner/spinner';
 import Swal from 'sweetalert2';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 
 
 
 @Component({
   selector: 'app-get-all-poke',
-  imports: [TitleCasePipe, CommonModule, Spinner, FormsModule],
+  imports: [TitleCasePipe, CommonModule, Spinner, FormsModule, BaseChartDirective],
   templateUrl: './get-all-poke.html',
   styleUrl: './get-all-poke.css',
 })
@@ -43,7 +45,7 @@ export class GetAllPoke {
   public cargando: boolean = false;
 
   public busqueda: string = '';
-  public tipoSeleccionados: string[] = []; 
+  public tipoSeleccionados: string[] = [];
 
   tiposPokemon: string[] = [
     'bug',
@@ -116,6 +118,12 @@ export class GetAllPoke {
           this.pokemones[index].speed = objeto.stats[5].base_stat;
           this.pokemones[index].types = objeto.types;
           this.pokemones[index].sonido = objeto.cries.latest;
+          this.pokemones[index].imagen = objeto.sprites.front_default;
+          this.pokemones[index].shiny = objeto.sprites.front_shiny;
+          this.pokemones[index].gift = objeto.sprites.other['showdown'].front_default;
+          this.pokemones[index].artWork = objeto.sprites.other['official-artwork'].front_default;
+          this.pokemones[index].imgHome = objeto.sprites.other['home'].front_default;
+          this.pokemones[index].imgDream = objeto.sprites.other['dream_world'].front_default;
 
           this.pokemonService.getDescPokemon(objeto.id).subscribe({
             next: (descData: any) => {
@@ -132,7 +140,9 @@ export class GetAllPoke {
         this.cachePokemon.push(...this.pokemones);
         this.pokemonesFiltrados = [...this.cachePokemon];
         this.cdr.detectChanges();
-        console.log("pokemones con stats:", this.cachePokemon);
+        console.log("cache pokemones:", this.cachePokemon);
+        console.log("pokemones filtrados:", this.pokemonesFiltrados);
+        console.log('lista pokemones:', this.pokemones);
       },
       complete: () => {
         this.estacargando = false;
@@ -181,18 +191,18 @@ export class GetAllPoke {
     });
   }
 
-  aplicarFiltros(){
+  aplicarFiltros() {
     this.offset = 0;
     this.pokemonesFiltrados = this.cachePokemon.filter(pokemon => {
       const coincideBusqueda = pokemon.name.toLowerCase().includes(this.busqueda.toLowerCase());
-      const coincideTipo = this.tipoSeleccionados.length === 0 || 
+      const coincideTipo = this.tipoSeleccionados.length === 0 ||
         this.tipoSeleccionados.every(tipoSeleccionado => pokemon.types.some(types => types.type.name === tipoSeleccionado));
 
       return coincideBusqueda && coincideTipo;
     })
   }
 
-  filtrarPorTipo(tipo: string){
+  filtrarPorTipo(tipo: string) {
     this.aplicarFiltros();
   }
 
@@ -212,17 +222,42 @@ export class GetAllPoke {
     this.aplicarFiltros();
   }
 
-  filtrarPokemones(){
+  filtrarPokemones() {
     this.aplicarFiltros();
   }
 
-  reproducirSonido(pokemon: Pokemon){
-    if(!pokemon.sonido) return;
+  reproducirSonido(pokemon: Pokemon) {
+    if (!pokemon.sonido) return;
 
     const audio = new Audio(pokemon.sonido);
     audio.volume = 0.5;
     audio.play();
   }
+
+  public imagenActual: string = '';
+  public imagenGuardada: string = '';
+
+  cambiarImagen(pokemon: Pokemon, event: Event) {
+    event.stopPropagation();
+
+    if (pokemon.mostrarGift === undefined) {
+      pokemon.mostrarGift = true;
+    }
+
+    pokemon.mostrarGift = !pokemon.mostrarGift;
+
+    if (pokemon.mostrarGift) {
+      pokemon.imgTemporal = pokemon.gift;
+    } else {
+      pokemon.imgTemporal = pokemon.artWork;
+    }
+  }
+
+  cambiarShiny(pokemon: Pokemon) {
+    if (!pokemon.shiny) return;
+    pokemon.imgTemporal = pokemon.shiny;
+  }
+
 
   removeFavorito(event: Event, pokemon: Pokemon) {
     console.log('Removiendo de favoritos:', pokemon);
@@ -267,5 +302,31 @@ export class GetAllPoke {
       }
     })
   }
+
+
+  ///
+  // Tipo de gráfica: radar
+  public radarChartType: ChartType = 'radar';
+
+  // Datos numéricos a mostrar (6 lados = 6 valores)
+  public radarChartData: ChartData<'radar'> = {
+    labels: ['Habilidad 1', 'Habilidad 2', 'Habilidad 3', 'Habilidad 4', 'Habilidad 5', 'Habilidad 6'],
+    datasets: [
+      { data: [65, 59, 90, 81, 56, 75], label: 'Serie A' },
+    ]
+  };
+
+  // Opciones de configuración
+  public radarChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    scales: {
+      r: {
+        angleLines: { display: true },
+        suggestedMin: 0,
+        suggestedMax: 100
+      }
+    }
+  };
+  ///
 
 }

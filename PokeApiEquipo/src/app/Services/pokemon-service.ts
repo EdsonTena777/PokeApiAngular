@@ -43,7 +43,9 @@ export class PokemonService {
     return this.http.delete(this.urlServicio + '?identificador=' + idUsuario + '&identificadorPokemon=' + identificadorPokemon, { headers: this.headers });
   }
 
+
   getFavById(id: number): Observable < result < Pokemon >> {
+    console.log('Token en getFavById:', this.token);
     return this.http.get<result<Pokemon>>(this.urlServicio + '/getFav?identificador=' + id, { headers: this.headers });
   }
 

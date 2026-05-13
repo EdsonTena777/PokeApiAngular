@@ -1,0 +1,19 @@
+<p>recuperar-contra works!</p>
+<div class="container">
+    <div class="pokedex-card">
+
+        <div class="pokeball"></div>
+
+        <h2 class="title">Activación de cuenta</h2>
+
+        <p class="text-muted">
+            Presiona el botón para activar tu cuenta.
+        </p>
+
+        <input type="email" class="form-control mb-3" placeholder="Ingresa tu correo electrónico" [(ngModel)]="correo">
+
+        <button (click)="reenviarVerificion($event, correo)" class="btn btn-pokemon w-100">
+            Reenviar verificación
+        </button>
+    </div>
+</div>

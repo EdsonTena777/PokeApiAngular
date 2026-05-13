@@ -7,11 +7,14 @@ import { Layout } from './Components/layout/layout';
 import { authGuard } from './guards/auth-guards';
 import { RecuperarContra } from './Components/recuperar-contra/recuperar-contra';
 import { NuevaContra } from './Components/nueva-contra/nueva-contra';
+import { ActivarCuenta } from './Components/activar-cuenta/activar-cuenta';
+import { Favoritos } from './Components/favoritos/favoritos';
 
 export const routes: Routes = [
   { path: 'login', component: PokemonLoginComponent },
   { path: 'addUsuario', component: AddUsuario },
   { path: 'verificar-cuenta', component: VerificarCuenta },
+  { path: 'activarCuenta', component: ActivarCuenta},
 
   {
     path: 'layout',
@@ -20,6 +23,7 @@ export const routes: Routes = [
     canActivateChild: [authGuard],
     children: [
       { path: 'pokedex', component: GetAllPoke },
+      { path: 'favoritos', component: Favoritos },
       { path: '', redirectTo: 'pokedex', pathMatch: 'full' }
     ]
   },

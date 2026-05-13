@@ -52,9 +52,9 @@ export class PokemonService {
     return this.http.post(this.urlServicio, usuario, { headers: this.headers });
   }
 
-login(loginDTO: any): Observable < any > {
-  return this.http.post(this.urlLogin + '/login', loginDTO);
-}
+  login(loginDTO: any): Observable < any > {
+    return this.http.post(this.urlLogin + '/login', loginDTO);
+  }
 
   getDescPokemon(id: number){
     return this.http.get(`${this.urlDesc}/${id}`);
@@ -62,6 +62,12 @@ login(loginDTO: any): Observable < any > {
 
   enviarRecuperarContra(correo: string): Observable<result<any>> {
     return this.http.post<result<any>>(this.urlLogin + '/recuperarContra?correo=' + correo, null);
+  }
+
+  reenviarVerificacion(correo: string){
+    return this.http.post(this.urlServicio +'/reenviar-verificacion', {
+      correo: correo
+    });
   }
 
   cambiarContra(token: string, contraNueva: string): Observable<result<any>> {

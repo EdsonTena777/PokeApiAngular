@@ -1,0 +1,103 @@
+<div class="row g-3 justify-content-center row-favoritos">
+    @for (pokemon of pokemonesFavoritos; track pokemon.idPokemon) {
+    <div class="col-md-4 d-flex">
+        <div class="carta-volteada" [class.flipped]="pokemon.flipped">
+            <div class="carta-volteada-dentro">
+                <div class="carta-volteada-frente">
+                    <div class="tarjeta-pokedex">
+                        <div class="marco-pantalla">
+                            <div class="datos-cabecera">
+                                <span class="nombre">{{ pokemon.name | titlecase }}</span>
+                                <span class="numero">no. {{ pokemon.idPokemon }}</span>
+                            </div>
+                            <div class="visor-pokemon">
+                                <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.idPokemon + '.png'"
+                                    [alt]="pokemon.name">
+                            </div>
+                            <div class="controles-inferiores">
+                                <div class="genero">
+                                    <img *ngFor="let types of pokemon.types"
+                                        [src]="'assets/types/' + types.type.name + '.png'" [alt]="types.type.name"
+                                        [title]="types.type.name" width="20" class="separacion">
+                                </div>
+                                <button class="bg-warning bg-gradient boton-favorito"
+                                    (click)="removeFavorito($event, pokemon)">
+                                    Quitar favorito
+                                </button>
+                                <div class="recargar" (click)="toggleFlip(pokemon, $event)" style="cursor: pointer;">↺
+                                </div>
+                            </div>
+                        </div>
+                        <div class="caja-descripcion">
+                            <p>{{ pokemon.descripcion }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carta-volteada-atras">
+                    <div class="tarjeta-pokedex">
+                        <div class="marco-pantalla-atras">
+                            <div class="datos-cabecera">
+                                <span class="nombre">Info Extra</span>
+                            </div>
+                            <div class="visor-pokemon">
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>
+                                <div class="d-flex gap-2">
+                                    <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
+                                    <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
+                                    <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="caja-descripcion">
+                            <div class="contenedor-stats">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <table class="tabla-stats">
+                                            <tbody>
+                                                <tr>
+                                                    <td>HP</td>
+                                                    <td class="valor">{{ pokemon.hp }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ataque</td>
+                                                    <td class="valor">{{ pokemon.attack }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Defensa</td>
+                                                    <td class="valor">{{pokemon.defense}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-6">
+                                        <table class="tabla-stats">
+                                            <tbody>
+                                                <tr>
+                                                    <td>At. Esp.</td>
+                                                    <td class="valor">{{pokemon.specialAttack}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Def. Esp.</td>
+                                                    <td class="valor">{{pokemon.specialDefense}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Velocidad</td>
+                                                    <td class="valor">{{pokemon.speed}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    } @empty {
+    <h3>No tienes Pokémon favoritos todavía.</h3>
+    }
+</div>

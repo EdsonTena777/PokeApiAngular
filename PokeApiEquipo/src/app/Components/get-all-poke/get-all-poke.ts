@@ -8,8 +8,8 @@ import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Spinner } from '../spinner/spinner';
 import Swal from 'sweetalert2';
-import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
+
+
 
 @Component({
   selector: 'app-get-all-poke',
@@ -20,6 +20,7 @@ import { BaseChartDirective } from 'ng2-charts';
 export class GetAllPoke {
 
   constructor(private cdr: ChangeDetectorRef) { }
+  public login = inject(PokemonLoginComponent);
 
   public idTemporal: undefined | number;
   voltea: boolean = false;
@@ -43,7 +44,7 @@ export class GetAllPoke {
   public cargando: boolean = false;
 
   public busqueda: string = '';
-  public tipoSeleccionados: string[] = []; 
+  public tipoSeleccionados: string[] = [];
 
   tiposPokemon: string[] = [
     'bug',
@@ -71,7 +72,6 @@ export class GetAllPoke {
   ngOnInit(): void {
     console.log('Component initialized');
     this.getDetalles();
-    this.getFavById(this.idUsuario);
   };
 
   idUsuario: number = parseInt(localStorage.getItem('userId') || '0');
@@ -106,6 +106,24 @@ export class GetAllPoke {
       })
     ).subscribe({
       next: (data: any) => {
+        this.pokemonService.getFavById(this.idUsuario).subscribe({
+          next: (data: any) => {
+            console.log("data:", data);
+            this.pokemonesFavoritos = data.map((objeto: any) => ({
+              idPokemon: objeto.idPokemon,
+            }));
+            this.cdr.detectChanges();
+            console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
+          },
+          error: (err) => {
+            console.error('Error al obtener Pokémon favorito:', err);
+            Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: "Error al obtener Pokémon favorito"
+            });
+          }
+        })
         console.log('Datos del PokémonE:', data);
         data.forEach((objeto: any, index: number) => {
           this.pokemones[index].hp = objeto.stats[0].base_stat;
@@ -189,18 +207,18 @@ export class GetAllPoke {
     });
   }
 
-  aplicarFiltros(){
+  aplicarFiltros() {
     this.offset = 0;
     this.pokemonesFiltrados = this.cachePokemon.filter(pokemon => {
       const coincideBusqueda = pokemon.name.toLowerCase().includes(this.busqueda.toLowerCase());
-      const coincideTipo = this.tipoSeleccionados.length === 0 || 
+      const coincideTipo = this.tipoSeleccionados.length === 0 ||
         this.tipoSeleccionados.every(tipoSeleccionado => pokemon.types.some(types => types.type.name === tipoSeleccionado));
 
       return coincideBusqueda && coincideTipo;
     })
   }
 
-  filtrarPorTipo(tipo: string){
+  filtrarPorTipo(tipo: string) {
     this.aplicarFiltros();
   }
 
@@ -220,12 +238,12 @@ export class GetAllPoke {
     this.aplicarFiltros();
   }
 
-  filtrarPokemones(){
+  filtrarPokemones() {
     this.aplicarFiltros();
   }
 
-  reproducirSonido(pokemon: Pokemon){
-    if(!pokemon.sonido) return;
+  reproducirSonido(pokemon: Pokemon) {
+    if (!pokemon.sonido) return;
 
     const audio = new Audio(pokemon.sonido);
     audio.volume = 0.5;
@@ -278,27 +296,30 @@ export class GetAllPoke {
     });
   }
 
-  getFavById(id: number) {
-    this.pokemonService.getFavById(id).subscribe({
-      next: (data: any) => {
-        console.log("data:", data);
-        this.pokemonesFavoritos = data.map((objeto: any) => ({
-          idPokemon: objeto.idPokemon,
-        }));
-        console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
-        /* data.forEach((objeto: any, index: number) => {
-          console.log("objeto.idPokemon:", objeto.idPokemon);
-          this.pokemonesFavoritos.push(objeto)
-        }
-        )
-      console.log("pokemonesFavoritos:", this.pokemonesFavoritos); */
-      },
-      error: (err) => {
-        console.error('Error al obtener Pokémon favorito:', err);
-        alert(`Error al obtener Pokémon favorito con ID ${id}.`);
+  ///
+  // Tipo de gráfica: radar
+  public radarChartType: ChartType = 'radar';
+
+  // Datos numéricos a mostrar (6 lados = 6 valores)
+  public radarChartData: ChartData<'radar'> = {
+    labels: ['Habilidad 1', 'Habilidad 2', 'Habilidad 3', 'Habilidad 4', 'Habilidad 5', 'Habilidad 6'],
+    datasets: [
+      { data: [65, 59, 90, 81, 56, 75], label: 'Serie A' },
+    ]
+  };
+
+  // Opciones de configuración
+  public radarChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    scales: {
+      r: {
+        angleLines: { display: true },
+        suggestedMin: 0,
+        suggestedMax: 100
       }
-    })
-  }
+    }
+  };
+  ///
 
   ///
   // Tipo de gráfica: radar

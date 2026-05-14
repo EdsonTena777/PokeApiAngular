@@ -15,9 +15,9 @@ export class PokemonService {
 
   private url = 'https://pokeapi.co/api/v2/pokemon/';
 
-  private urlServicio = 'http://localhost:8080/pokemon';
+  private urlServicio = 'http://192.167.0.94:8080/pokemon';
 
-  private urlLogin = 'http://localhost:8080/auth';
+  private urlLogin = 'http://192.167.0.94:8080/auth';
 
   private urlDesc = 'https://pokeapi.co/api/v2/pokemon-species';
   
@@ -43,6 +43,7 @@ export class PokemonService {
     return this.http.delete(this.urlServicio + '?identificador=' + idUsuario + '&identificadorPokemon=' + identificadorPokemon, { headers: this.headers });
   }
 
+
   getFavById(id: number): Observable < result < Pokemon >> {
     console.log('Token en getFavById:', this.token);
     return this.http.get<result<Pokemon>>(this.urlServicio + '/getFav?identificador=' + id, { headers: this.headers });
@@ -50,7 +51,7 @@ export class PokemonService {
 
 
   addUsuario(usuario: UsuarioAddDTO): Observable < any > {
-    return this.http.post(this.urlServicio, usuario, { headers: this.headers });
+    return this.http.post(this.urlServicio, usuario);
   }
 
   login(loginDTO: any): Observable < any > {

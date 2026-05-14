@@ -17,6 +17,9 @@
         <div class="navbar-actions">
             <button (click)="isFavoritos()" class="btn-poke">Favoritos</button>
             <button (click)="onLogout()" class="btn-poke danger">Cerrar sesión</button>
+            @if (login.hasRole('SuperMaestro')) {
+                <button  class="btn-poke danger">Usuarios</button>
+            }
         </div>
     </nav>
     <router-outlet></router-outlet>

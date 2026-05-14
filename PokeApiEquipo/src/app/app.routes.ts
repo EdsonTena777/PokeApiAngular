@@ -15,6 +15,8 @@ export const routes: Routes = [
   { path: 'addUsuario', component: AddUsuario },
   { path: 'verificar-cuenta', component: VerificarCuenta },
   { path: 'activarCuenta', component: ActivarCuenta},
+  {path: 'recuperarContra', component: RecuperarContra},
+  {path: 'nuevaContra', component: NuevaContra},
 
   {
     path: 'layout',

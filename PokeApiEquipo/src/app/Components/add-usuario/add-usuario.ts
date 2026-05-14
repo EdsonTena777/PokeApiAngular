@@ -43,7 +43,7 @@ export class AddUsuario {
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: "${usuario.UserName} ha sido registrado exitosamente",
+            title: '${usuario.UserName} ha sido registrado exitosamente',
             showConfirmButton: false,
             timer: 1500
           });

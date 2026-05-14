@@ -10,18 +10,20 @@ import { Spinner } from '../spinner/spinner';
 import Swal from 'sweetalert2';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { PokemonLoginComponent } from '../login-poke/login-poke';
 
 
 
 @Component({
   selector: 'app-get-all-poke',
-  imports: [TitleCasePipe, CommonModule, Spinner, FormsModule, BaseChartDirective],
+  imports: [TitleCasePipe, CommonModule, Spinner, FormsModule],
   templateUrl: './get-all-poke.html',
   styleUrl: './get-all-poke.css',
 })
 export class GetAllPoke {
 
   constructor(private cdr: ChangeDetectorRef) { }
+  public login = inject(PokemonLoginComponent);
 
   public idTemporal: undefined | number;
   voltea: boolean = false;
@@ -73,7 +75,6 @@ export class GetAllPoke {
   ngOnInit(): void {
     console.log('Component initialized');
     this.getDetalles();
-    this.getFavById(this.idUsuario);
   };
 
   idUsuario: number = parseInt(localStorage.getItem('userId') || '0');
@@ -108,6 +109,24 @@ export class GetAllPoke {
       })
     ).subscribe({
       next: (data: any) => {
+        this.pokemonService.getFavById(this.idUsuario).subscribe({
+          next: (data: any) => {
+            console.log("data:", data);
+            this.pokemonesFavoritos = data.map((objeto: any) => ({
+              idPokemon: objeto.idPokemon,
+            }));
+            this.cdr.detectChanges();
+            console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
+          },
+          error: (err) => {
+            console.error('Error al obtener Pokémon favorito:', err);
+            Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: "Error al obtener Pokémon favorito"
+            });
+          }
+        })
         console.log('Datos del PokémonE:', data);
         data.forEach((objeto: any, index: number) => {
           this.pokemones[index].hp = objeto.stats[0].base_stat;
@@ -258,7 +277,6 @@ export class GetAllPoke {
     pokemon.imgTemporal = pokemon.shiny;
   }
 
-
   removeFavorito(event: Event, pokemon: Pokemon) {
     console.log('Removiendo de favoritos:', pokemon);
     this.pokemonService.removeFavorito(this.idUsuario, pokemon.idPokemon).subscribe({
@@ -280,29 +298,6 @@ export class GetAllPoke {
       }
     });
   }
-
-  getFavById(id: number) {
-    this.pokemonService.getFavById(id).subscribe({
-      next: (data: any) => {
-        console.log("data:", data);
-        this.pokemonesFavoritos = data.map((objeto: any) => ({
-          idPokemon: objeto.idPokemon,
-        }));
-        console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
-        /* data.forEach((objeto: any, index: number) => {
-          console.log("objeto.idPokemon:", objeto.idPokemon);
-          this.pokemonesFavoritos.push(objeto)
-        }
-        )
-      console.log("pokemonesFavoritos:", this.pokemonesFavoritos); */
-      },
-      error: (err) => {
-        console.error('Error al obtener Pokémon favorito:', err);
-        alert(`Error al obtener Pokémon favorito con ID ${id}.`);
-      }
-    })
-  }
-
 
   ///
   // Tipo de gráfica: radar

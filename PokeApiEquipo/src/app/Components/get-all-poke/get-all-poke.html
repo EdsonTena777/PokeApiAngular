@@ -67,17 +67,19 @@
               <div class="tarjeta-pokedex">
                 <div class="marco-pantalla-atras">
                   <div class="datos-cabecera">
-                    <span class="nombre">Info Extra</span>
+                    <span class="nombre">Info 2</span>
                   </div>
-                  <div class="visor-pokemon">
-
+                  <div class="visor-pokemon img">
+                    <img
+                      [src]="pokemon.imgTemporal || pokemon.gift"
+                      [alt]="pokemon.name">
                   </div>
                   <div class="d-flex justify-content-between align-items-center">
                     <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>
                     <div class="d-flex gap-2">
-                      <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
-                      <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
-                      <button class="boton-favorito" (click)="reproducirSonido(pokemon)">S</button>
+                      <button class="boton-favorito" (click)="reproducirSonido(pokemon)">1</button>
+                      <button class="boton-favorito" (click)="cambiarImagen(pokemon, $event)">2</button>
+                      <button class="boton-favorito" (click)="cambiarShiny(pokemon)">3</button>
                     </div>
                   </div>
                 </div>

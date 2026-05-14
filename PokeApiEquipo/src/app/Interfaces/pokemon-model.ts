@@ -12,7 +12,14 @@ export interface Pokemon {
   speed: string,
   types: TypeElement[],
   descripcion: string,
-  sonido: string
+  sonido: string,
+  shiny : string,
+  gift : string,
+  artWork : string,
+  imgHome : string,
+  imgDream : string,
+  imgTemporal: string
+  mostrarGift?: boolean
 }
 
 export interface TypeElement {

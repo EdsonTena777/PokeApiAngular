@@ -44,6 +44,7 @@ export class PokemonService {
   }
 
   getFavById(id: number): Observable < result < Pokemon >> {
+    console.log('Token en getFavById:', this.token);
     return this.http.get<result<Pokemon>>(this.urlServicio + '/getFav?identificador=' + id, { headers: this.headers });
   }
 

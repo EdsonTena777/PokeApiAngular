@@ -8,6 +8,9 @@ import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Spinner } from '../spinner/spinner';
 import Swal from 'sweetalert2';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import { PokemonLoginComponent } from '../login-poke/login-poke';
 
 
 
@@ -296,51 +299,24 @@ export class GetAllPoke {
     });
   }
 
-  ///
-  // Tipo de gráfica: radar
-  public radarChartType: ChartType = 'radar';
-
-  // Datos numéricos a mostrar (6 lados = 6 valores)
-  public radarChartData: ChartData<'radar'> = {
-    labels: ['Habilidad 1', 'Habilidad 2', 'Habilidad 3', 'Habilidad 4', 'Habilidad 5', 'Habilidad 6'],
-    datasets: [
-      { data: [65, 59, 90, 81, 56, 75], label: 'Serie A' },
-    ]
-  };
-
-  // Opciones de configuración
-  public radarChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    scales: {
-      r: {
-        angleLines: { display: true },
-        suggestedMin: 0,
-        suggestedMax: 100
-      }
-    }
-  };
-  ///
-
-  ///
-  // Tipo de gráfica: radar
-  public radarChartType: ChartType = 'radar';
-
-  // Datos numéricos a mostrar (6 lados = 6 valores)
-  public radarChartData: ChartData<'radar'> = {
-    labels: ['Habilidad 1', 'Habilidad 2', 'Habilidad 3', 'Habilidad 4', 'Habilidad 5', 'Habilidad 6'],
-    datasets: [
-      { data: [65, 59, 90, 81, 56, 75], label: 'Serie A' },
-    ]
-  };
-
-  // Opciones de configuración
-  public radarChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    scales: {
-      r: {
-        angleLines: { display: true },
-        suggestedMin: 0,
-        suggestedMax: 100
+  getFavById(id: number) {
+    this.pokemonService.getFavById(id).subscribe({
+      next: (data: any) => {
+        console.log("data:", data);
+        this.pokemonesFavoritos = data.map((objeto: any) => ({
+          idPokemon: objeto.idPokemon,
+        }));
+        console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
+        /* data.forEach((objeto: any, index: number) => {
+          console.log("objeto.idPokemon:", objeto.idPokemon);
+          this.pokemonesFavoritos.push(objeto)
+        }
+        )
+      console.log("pokemonesFavoritos:", this.pokemonesFavoritos); */
+      },
+      error: (err) => {
+        console.error('Error al obtener Pokémon favorito:', err);
+        alert(`Error al obtener Pokémon favorito con ID ${id}.`);
       }
     }
   };

@@ -15,9 +15,9 @@ export class PokemonService {
 
   private url = 'https://pokeapi.co/api/v2/pokemon/';
 
-  private urlServicio = 'http://192.167.0.94:8080/pokemon';
+  private urlServicio = 'http://localhost:8080/pokemon';
 
-  private urlLogin = 'http://192.167.0.94:8080/auth';
+  private urlLogin = 'http://localhost:8080/auth';
 
   private urlDesc = 'https://pokeapi.co/api/v2/pokemon-species';
   
@@ -79,5 +79,11 @@ export class PokemonService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+  }
+
+  verificarEstado(correo: string) {
+    return this.http.get<boolean>(
+      `${this.urlServicio}/verificar-estado?correo=${correo}`
+    );
   }
 }

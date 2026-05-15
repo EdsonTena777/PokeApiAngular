@@ -9,6 +9,7 @@ import { RecuperarContra } from './Components/recuperar-contra/recuperar-contra'
 import { NuevaContra } from './Components/nueva-contra/nueva-contra';
 import { ActivarCuenta } from './Components/activar-cuenta/activar-cuenta';
 import { Favoritos } from './Components/favoritos/favoritos';
+import { VerificarPendiente } from './Components/verificar-pendiente/verificar-pendiente';
 
 export const routes: Routes = [
   { path: 'login', component: PokemonLoginComponent },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'activarCuenta', component: ActivarCuenta},
   {path: 'recuperarContra', component: RecuperarContra},
   {path: 'nuevaContra', component: NuevaContra},
+  { path: 'verificar-pendiente', component: VerificarPendiente},
 
   {
     path: 'layout',

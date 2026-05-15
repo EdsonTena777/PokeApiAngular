@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Usuario } from '../../Interfaces/usuario-model';
 import { UsuarioAddDTO } from '../../Interfaces/usuarioAdd-model';
 import { PokemonService } from '../../Services/pokemon-service';
+import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
 
 
@@ -22,6 +23,7 @@ export class AddUsuario {
   };
 
   private pokemonService = inject(PokemonService);
+  private router = inject(Router);
 
   agregarUsuario() {
     if (this.usuario.UserName && this.usuario.Correo && this.usuario.Password) {
@@ -40,13 +42,16 @@ export class AddUsuario {
 
       this.pokemonService.addUsuario(dto).subscribe({
         next: (response) => {
+          console.log("RESPUESTA ADD:", response);
+          localStorage.setItem('correoPendiente', this.usuario.Correo);
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: '${usuario.UserName} ha sido registrado exitosamente',
+            title: `${this.usuario.UserName} ha sido registrado exitosamente`,
             showConfirmButton: false,
             timer: 1500
           });
+          this.router.navigate(['/verificar-pendiente']);
         },
         error: (error) => {
           if (error) {

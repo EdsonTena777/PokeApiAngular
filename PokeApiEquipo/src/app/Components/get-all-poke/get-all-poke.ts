@@ -16,7 +16,7 @@ import { PokemonLoginComponent } from '../login-poke/login-poke';
 
 @Component({
   selector: 'app-get-all-poke',
-  imports: [TitleCasePipe, CommonModule, Spinner, FormsModule, BaseChartDirective],
+  imports: [TitleCasePipe, CommonModule, Spinner, FormsModule],
   templateUrl: './get-all-poke.html',
   styleUrl: './get-all-poke.css',
 })
@@ -299,24 +299,26 @@ export class GetAllPoke {
     });
   }
 
-  getFavById(id: number) {
-    this.pokemonService.getFavById(id).subscribe({
-      next: (data: any) => {
-        console.log("data:", data);
-        this.pokemonesFavoritos = data.map((objeto: any) => ({
-          idPokemon: objeto.idPokemon,
-        }));
-        console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
-        /* data.forEach((objeto: any, index: number) => {
-          console.log("objeto.idPokemon:", objeto.idPokemon);
-          this.pokemonesFavoritos.push(objeto)
-        }
-        )
-      console.log("pokemonesFavoritos:", this.pokemonesFavoritos); */
-      },
-      error: (err) => {
-        console.error('Error al obtener Pokémon favorito:', err);
-        alert(`Error al obtener Pokémon favorito con ID ${id}.`);
+  ///
+  // Tipo de gráfica: radar
+  public radarChartType: ChartType = 'radar';
+
+  // Datos numéricos a mostrar (6 lados = 6 valores)
+  public radarChartData: ChartData<'radar'> = {
+    labels: ['Habilidad 1', 'Habilidad 2', 'Habilidad 3', 'Habilidad 4', 'Habilidad 5', 'Habilidad 6'],
+    datasets: [
+      { data: [65, 59, 90, 81, 56, 75], label: 'Serie A' },
+    ]
+  };
+
+  // Opciones de configuración
+  public radarChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    scales: {
+      r: {
+        angleLines: { display: true },
+        suggestedMin: 0,
+        suggestedMax: 100
       }
     }
   };

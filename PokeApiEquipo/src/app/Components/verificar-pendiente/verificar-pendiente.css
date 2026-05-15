@@ -1,0 +1,44 @@
+.verificacion-container{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card-verificacion{
+    width:450px;
+    padding:30px;
+    text-align:center;
+    border-radius:20px;
+    background:white;
+    box-shadow:0 0 20px rgba(0,0,0,.2);
+}
+
+.pokeball-loader{
+    width:80px;
+    height:80px;
+    margin:auto;
+    margin-bottom:20px;
+    border-radius:50%;
+    border:8px solid #000;
+
+    background:
+    linear-gradient(
+    red 0 50%,
+    white 50% 100%
+    );
+
+    animation:girar 1s linear infinite;
+}
+
+@keyframes girar{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}

@@ -94,6 +94,12 @@ export class PokemonService {
     localStorage.removeItem('userId');
   }
 
+  verificarEstado(correo: string) {
+    return this.http.get<boolean>(
+      `${this.urlServicio}/verificar-estado?correo=${correo}`
+    );
+  }
+
   getAllUsers(): Observable<result<Usuario[]>> {
     return this.http.get<result<Usuario[]>>(this.urlServicio + '/getAll', { headers: this.headers });
   }

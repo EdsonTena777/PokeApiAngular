@@ -73,8 +73,16 @@ export class GetAllPoke {
   private pokemonService = inject(PokemonService);
 
   ngOnInit(): void {
-    console.log('Component initialized');
-    this.getDetalles();
+    const datosGuardados = this.pokemonService.getPokemones();
+
+    if (datosGuardados.length > 0) {
+      this.pokemones = datosGuardados;
+      console.log('Datos cargados desde cache', this.pokemones);
+      this.estacargando = false;
+      this.cdr.detectChanges();
+    } else {
+      this.getDetalles(); // Solo hace el llamado cuando no hay nada en el cache 
+    }
   };
 
   idUsuario: number = parseInt(localStorage.getItem('userId') || '0');
@@ -116,7 +124,6 @@ export class GetAllPoke {
               idPokemon: objeto.idPokemon,
             }));
             this.cdr.detectChanges();
-            console.log("pokemonesFavoritos:", this.pokemonesFavoritos);
           },
           error: (err) => {
             console.error('Error al obtener Pokémon favorito:', err);
@@ -156,12 +163,11 @@ export class GetAllPoke {
             }
           });
         })
-        this.cachePokemon.push(...this.pokemones);
-        this.pokemonesFiltrados = [...this.cachePokemon];
+        //this.cachePokemon.push(...this.pokemones);
+        this.pokemonesFiltrados = [...this.pokemones];
+        this.pokemonService.setPokemones(this.pokemonesFiltrados); // Guardar en cache
         this.cdr.detectChanges();
-        console.log("cache pokemones:", this.cachePokemon);
-        console.log("pokemones filtrados:", this.pokemonesFiltrados);
-        console.log('lista pokemones:', this.pokemones);
+
       },
       complete: () => {
         this.estacargando = false;
@@ -173,7 +179,9 @@ export class GetAllPoke {
   }
 
   get pokemonesAMostrar() {
+    console.log('Pokemones en el get PokemonesAMostrar:', this.pokemonesFiltrados);
     return this.pokemonesFiltrados.slice(this.offset, this.offset + this.limitfuera);
+    
   }
 
   siguientePagina() {
@@ -212,7 +220,7 @@ export class GetAllPoke {
 
   aplicarFiltros() {
     this.offset = 0;
-    this.pokemonesFiltrados = this.cachePokemon.filter(pokemon => {
+    this.pokemonesFiltrados = this.pokemones.filter(pokemon => {
       const coincideBusqueda = pokemon.name.toLowerCase().includes(this.busqueda.toLowerCase());
       const coincideTipo = this.tipoSeleccionados.length === 0 ||
         this.tipoSeleccionados.every(tipoSeleccionado => pokemon.types.some(types => types.type.name === tipoSeleccionado));
@@ -298,30 +306,5 @@ export class GetAllPoke {
       }
     });
   }
-
-  ///
-  // Tipo de gráfica: radar
-  public radarChartType: ChartType = 'radar';
-
-  // Datos numéricos a mostrar (6 lados = 6 valores)
-  public radarChartData: ChartData<'radar'> = {
-    labels: ['Habilidad 1', 'Habilidad 2', 'Habilidad 3', 'Habilidad 4', 'Habilidad 5', 'Habilidad 6'],
-    datasets: [
-      { data: [65, 59, 90, 81, 56, 75], label: 'Serie A' },
-    ]
-  };
-
-  // Opciones de configuración
-  public radarChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    scales: {
-      r: {
-        angleLines: { display: true },
-        suggestedMin: 0,
-        suggestedMax: 100
-      }
-    }
-  };
-  ///
 
 }

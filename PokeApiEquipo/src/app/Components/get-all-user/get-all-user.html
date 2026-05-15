@@ -1,1 +1,41 @@
-<p>get-all-user works!</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <h1>Usuarios3</h1>
+    <button (click)="regresar()" class="btn-poke">Regresar</button>
+
+    <div class="contenedor-cards">
+        @for (usuario of usuarios; track usuario.IdUsuario) {
+
+        <div class="contenedor-cards">
+            <div class="card" style="width: 18rem; ">
+                <div class="card-header">
+                    <span>{{ usuario.UserName }}</span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Correo: {{ usuario.Correo }}</li>
+                    <li class="list-group-item">Rol: {{ usuario.Rol.NombreRol }}</li>
+
+                </ul>
+            </div>
+        </div>
+
+        }
+    </div>
+
+
+
+
+
+</body>
+
+</html>

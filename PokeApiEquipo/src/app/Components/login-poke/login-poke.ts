@@ -81,7 +81,7 @@ export class PokemonLoginComponent {
 
     try {
       const decoded: any = jwtDecode(token);
-      console.log("Token decodificado:", decoded);
+      //console.log("Token decodificado:", decoded);
       return decoded.rol;
     } catch (error) {
       console.error("Error decodificando el token", error);
@@ -91,7 +91,7 @@ export class PokemonLoginComponent {
 
   hasRole(roleName: string): boolean {
     const currentRole = this.getRolFromToken();
-    console.log("Rol actual:", currentRole);
+    //console.log("Rol actual:", currentRole);
     return currentRole === roleName;
   }
 

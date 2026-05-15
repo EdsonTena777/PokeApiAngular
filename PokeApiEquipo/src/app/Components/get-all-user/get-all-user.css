@@ -1,0 +1,5 @@
+.contenedor-cards {
+  display: flex; /* Coloca los elementos uno al lado del otro */
+  gap: 20px;     /* Espacio de separación entre las tarjetas */
+}
+

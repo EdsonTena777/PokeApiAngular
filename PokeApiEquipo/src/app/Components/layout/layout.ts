@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet, RouterLinkWithHref } from '@angular/router';
 import { PokemonService } from '../../Services/pokemon-service';
 import { PokemonLoginComponent } from '../login-poke/login-poke';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
@@ -10,18 +11,27 @@ import { PokemonLoginComponent } from '../login-poke/login-poke';
   styleUrl: './layout.css',
 })
 export class Layout {
+  location = inject(Location);
 
-private pokemonService = inject(PokemonService);
-private router = inject(Router);
-public login = inject(PokemonLoginComponent);
+  private pokemonService = inject(PokemonService);
+  private router = inject(Router);
+  public login = inject(PokemonLoginComponent);
 
-  onLogout(){
+  onLogout() {
     this.pokemonService.logout();
-    this.router.navigate(['/login'], { replaceUrl: true }); 
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 
-  isFavoritos(){
+  isFavoritos() {
     this.router.navigate(['/layout/favoritos']);
+  }
+
+  getAllUser() {
+    this.router.navigate(['/layout/getAllUser']);
+  }
+
+  regresar() {
+    this.location.back(); // Retrocede en el historial sin recargar
   }
 
 }

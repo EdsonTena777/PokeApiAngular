@@ -18,7 +18,7 @@
             <button (click)="isFavoritos()" class="btn-poke">Favoritos</button>
             <button (click)="onLogout()" class="btn-poke danger">Cerrar sesión</button>
             @if (login.hasRole('SuperMaestro')) {
-                <button  class="btn-poke danger">Usuarios</button>
+                <button  class="btn-poke danger" (click)="getAllUser()">Usuarios</button>
             }
         </div>
     </nav>

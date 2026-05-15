@@ -9,6 +9,7 @@ import { RecuperarContra } from './Components/recuperar-contra/recuperar-contra'
 import { NuevaContra } from './Components/nueva-contra/nueva-contra';
 import { ActivarCuenta } from './Components/activar-cuenta/activar-cuenta';
 import { Favoritos } from './Components/favoritos/favoritos';
+import { GetAllUser } from './Components/get-all-user/get-all-user';
 
 export const routes: Routes = [
   { path: 'login', component: PokemonLoginComponent },
@@ -26,6 +27,7 @@ export const routes: Routes = [
     children: [
       { path: 'pokedex', component: GetAllPoke },
       { path: 'favoritos', component: Favoritos },
+      {path: 'getAllUser', component: GetAllUser},
       { path: '', redirectTo: 'pokedex', pathMatch: 'full' }
     ]
   },

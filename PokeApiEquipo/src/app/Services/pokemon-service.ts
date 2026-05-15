@@ -6,6 +6,7 @@ import { result } from '../Interfaces/result-model';
 import { Pokemon } from '../Interfaces/pokemon-model';
 import { UsuarioAddDTO } from '../Interfaces/usuarioAdd-model';
 import { HttpInterceptorFn } from '@angular/common/http';
+import { Usuario } from '../Interfaces/usuario-model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,17 +16,29 @@ export class PokemonService {
 
   private url = 'https://pokeapi.co/api/v2/pokemon/';
 
-  private urlServicio = 'http://192.167.0.94:8080/pokemon';
+  private urlServicio = 'http://192.167.0.98:8080/pokemon';
 
-  private urlLogin = 'http://192.167.0.94:8080/auth';
+  private urlLogin = 'http://192.167.0.98:8080/auth';
 
   private urlDesc = 'https://pokeapi.co/api/v2/pokemon-species';
-  
+
 
   private token = localStorage.getItem('token');
   private headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
 
   constructor(private http: HttpClient) { }
+
+  // Cache para almacenar los pokemones obtenidos SIN necesidad de volver a hacer la petición
+  private cachePokemones: any[] = [];
+
+  setPokemones(data: any[]) {
+    this.cachePokemones = data;
+  }
+
+  getPokemones() {
+    return this.cachePokemones;
+  }
+  //
 
   GetAllPoke(limit: number = 20, offset: number = 0): Observable<any> {
     return this.http.get(`${this.url}?limit=${limit}&offset=${offset}`);
@@ -44,21 +57,21 @@ export class PokemonService {
   }
 
 
-  getFavById(id: number): Observable < result < Pokemon >> {
+  getFavById(id: number): Observable<result<Pokemon>> {
     console.log('Token en getFavById:', this.token);
     return this.http.get<result<Pokemon>>(this.urlServicio + '/getFav?identificador=' + id, { headers: this.headers });
   }
 
 
-  addUsuario(usuario: UsuarioAddDTO): Observable < any > {
+  addUsuario(usuario: UsuarioAddDTO): Observable<any> {
     return this.http.post(this.urlServicio, usuario);
   }
 
-  login(loginDTO: any): Observable < any > {
+  login(loginDTO: any): Observable<any> {
     return this.http.post(this.urlLogin + '/login', loginDTO);
   }
 
-  getDescPokemon(id: number){
+  getDescPokemon(id: number) {
     return this.http.get(`${this.urlDesc}/${id}`);
   }
 
@@ -66,8 +79,8 @@ export class PokemonService {
     return this.http.post<result<any>>(this.urlLogin + '/recuperarContra?correo=' + correo, null);
   }
 
-  reenviarVerificacion(correo: string){
-    return this.http.post(this.urlServicio +'/reenviar-verificacion', {
+  reenviarVerificacion(correo: string) {
+    return this.http.post(this.urlServicio + '/reenviar-verificacion', {
       correo: correo
     });
   }
@@ -80,4 +93,9 @@ export class PokemonService {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
   }
+
+  getAllUsers(): Observable<result<Usuario[]>> {
+    return this.http.get<result<Usuario[]>>(this.urlServicio + '/getAll', { headers: this.headers });
+  }
+
 }

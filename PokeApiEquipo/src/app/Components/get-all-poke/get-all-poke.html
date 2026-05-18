@@ -1,7 +1,7 @@
 <body>
   <div class="container mt-2">
     <div class="search-container">
-      <div class="d-flex align-items-center flex-wrap mb-3">        
+      <div class="d-flex align-items-center flex-wrap mb-3">
         <div class="col-3">
           <input type="text" class="form-control" placeholder="Buscar por pokemon..." [(ngModel)]="busqueda"
             (input)="filtrarPokemones()">
@@ -14,15 +14,25 @@
         </div>
       </div>
       <div class="pagination-bar">
-        <button (click)="anteriorPagina()" [disabled]="offset === 0" class="btn-nav">Atras</button>
-        <div class="page-indicator">
-          <span class="current">{{ paginaActual }}</span>
-          <span class="separator">/</span>
-          <span class="total">{{ totalPaginas }}</span>
+        <div class="paginacion-central">
+          <button (click)="anteriorPagina()" [disabled]="offset === 0" class="btn-nav">Atras</button>
+          <div class="page-indicator">
+            <span class="current">{{ paginaActual }}</span>
+            <span class="separator">/</span>
+            <span class="total">{{ totalPaginas }}</span>
+          </div>
+          <button (click)="siguientePagina()" [disabled]="(offset + limitfuera) >= pokemonesFiltrados.length"
+            class="btn-nav">
+            Siguiente
+          </button>
         </div>
-        <button (click)="siguientePagina()" [disabled]="(offset + limitfuera) >= pokemonesFiltrados.length" class="btn-nav">
-          Siguiente
-        </button>
+
+        <div class="contenedor-derecha">
+          <select [(ngModel)]="generacionSeleccionado" (change)="aplicarFiltros()">
+            <option value="">Todas las generaciones</option>
+            <option *ngFor="let gen of generaciones" [value]="gen">{{gen}}</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="row g-3 justify-content-center row-favoritos mb-2">
@@ -38,9 +48,7 @@
                     <span class="numero">no. {{ pokemon.idPokemon }}</span>
                   </div>
                   <div class="visor-pokemon">
-                    <img
-                      [src]="pokemon.imagen"
-                      [alt]="pokemon.name">
+                    <img [src]="pokemon.imagen" [alt]="pokemon.name">
                   </div>
                   <div class="controles-inferiores">
                     <div class="genero">
@@ -70,9 +78,7 @@
                     <span class="nombre">Info 2</span>
                   </div>
                   <div class="visor-pokemon img">
-                    <img
-                      [src]="pokemon.imgTemporal || pokemon.gift"
-                      [alt]="pokemon.name">
+                    <img [src]="pokemon.imgTemporal || pokemon.gift" [alt]="pokemon.name">
                   </div>
                   <div class="d-flex justify-content-between align-items-center">
                     <button class="boton-favorito" (click)="toggleFlip(pokemon, $event)">VOLVER</button>

@@ -228,8 +228,8 @@
 .pagination-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
+  width: 100%;
+  position: relative; 
   padding-top: 15px;
   margin-bottom: 10px;
 }
@@ -261,4 +261,18 @@
     padding-left: 105px;
     padding-right: 5px;
     margin-top: 12px;
+}
+
+.paginacion-central {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.contenedor-derecha {
+  display: flex;
+  justify-content: flex-end; 
+  margin-left: auto; 
+  padding-right: 15px; 
 }

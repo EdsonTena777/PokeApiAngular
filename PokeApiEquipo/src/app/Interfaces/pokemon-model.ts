@@ -18,8 +18,9 @@ export interface Pokemon {
   artWork : string,
   imgHome : string,
   imgDream : string,
-  imgTemporal: string
-  mostrarGift?: boolean
+  imgTemporal: string,
+  mostrarGift?: boolean,
+  generation: string
 }
 
 export interface TypeElement {

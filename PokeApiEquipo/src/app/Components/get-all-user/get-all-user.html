@@ -5,29 +5,52 @@
 <div class="usuarios-container">
   @for (usuario of usuarios; track usuario.IdUsuario) {
 
-    <div class="usuario-card">
-      <div class="usuario-header">
-        <span>{{ usuario.UserName }}</span>
-        <span>#{{ usuario.IdUsuario }}</span>
-      </div>
-
-      <div class="usuario-body">
-        <p>
-          <strong>Correo:</strong>
-          {{ usuario.Correo }}
-        </p>
-
-        <p>
-          <strong>Rol:</strong>
-          {{ usuario.Rol.NombreRol }}
-        </p>
-      </div>
-
-      <div class="usuario-footer">
-        <button class="btn-update">Actualizar</button>
-        <button class="btn-delete">Eliminar</button>
-      </div>
+  <div class="usuario-card">
+    <div class="usuario-header">
+      <span>{{ usuario.UserName }}</span>
+      <span>#{{ usuario.IdUsuario }}</span>
     </div>
 
+    <div class="usuario-body">
+      <p>
+        <strong>Correo:</strong>
+        {{ usuario.Correo }}
+      </p>
+
+      <p>
+        <strong>Rol:</strong>
+        {{ usuario.Rol.NombreRol }}
+      </p>
+    </div>
+
+    <div class="usuario-footer">
+      <button type="button" class="btn-update" (click)="abrirModal(usuario)">Actualizar</button>
+      <button class="btn-delete" (click)="deleteUser(usuario.IdUsuario)">Eliminar</button>
+    </div>
+  </div>
+
   }
+
+  <!-- Modal -->
+  <div class="modal fade" #miModal tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Actualizacion de Usuario</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <span>Username</span>
+          <input type="text" class="form-control" placeholder="Nombre de usuario" [(ngModel)]="usuarioSeleccionado.UserName">
+          <span>Correo electrónico</span>
+          <input type="email" class="form-control" placeholder="Correo electrónico" [(ngModel)]="usuarioSeleccionado.Correo">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" (click)="updateUser(usuarioSeleccionado)">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

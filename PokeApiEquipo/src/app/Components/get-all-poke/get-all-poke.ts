@@ -80,7 +80,7 @@ export class GetAllPoke {
 
       this.pokemonesFiltrados = [...datosGuardados];
       this.pokemonesFavoritos = [...favoritosGuardados];
-      console.log('Datos cargados desde cache', this.pokemones);
+      console.log('Datos cargados desde cache', this.pokemonesFiltrados);
       this.estacargando = false;
       this.cdr.detectChanges();
     } else {
@@ -183,7 +183,6 @@ export class GetAllPoke {
   }
 
   get pokemonesAMostrar() {
-    console.log('Pokemones en el get PokemonesAMostra:', this.pokemonesFiltrados);
     return this.pokemonesFiltrados.slice(this.offset, this.offset + this.limitfuera);
   }
 
@@ -223,7 +222,8 @@ export class GetAllPoke {
 
   aplicarFiltros() {
     this.offset = 0;
-    this.pokemonesFiltrados = this.pokemones.filter(pokemon => {
+    
+     this.pokemonesFiltrados = this.pokemonService.getPokemones().filter(pokemon => {
       const coincideBusqueda = pokemon.name.toLowerCase().includes(this.busqueda.toLowerCase());
       const coincideTipo = this.tipoSeleccionados.length === 0 ||
         this.tipoSeleccionados.every(tipoSeleccionado => pokemon.types.some(types => types.type.name === tipoSeleccionado));

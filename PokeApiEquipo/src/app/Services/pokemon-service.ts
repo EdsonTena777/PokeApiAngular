@@ -38,9 +38,9 @@ export class PokemonService {
   getFavoritos() {
     return this.cacheFavoritos;
   }
-  private cachePokemones: any[] = [];
+  private cachePokemones: Pokemon[] = [];
 
-  setPokemones(data: any[]) {
+  setPokemones(data: Pokemon[]) {
     this.cachePokemones = data;
   }
 
@@ -111,6 +111,14 @@ export class PokemonService {
 
   getAllUsers(): Observable<result<Usuario[]>> {
     return this.http.get<result<Usuario[]>>(this.urlServicio + '/getAll', { headers: this.headers });
+  }
+
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete(this.urlServicio + '/deleteUser?identificador=' + id, { headers: this.headers });
+  }
+
+  updateUser(usuario: Usuario): Observable<any> {
+    return this.http.patch(this.urlServicio, usuario, { headers: this.headers });
   }
 
 }

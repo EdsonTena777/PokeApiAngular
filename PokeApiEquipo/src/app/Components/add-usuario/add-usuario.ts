@@ -19,6 +19,7 @@ export class AddUsuario {
     UserName: '',
     Correo: '',
     Password: '',
+    Status: 0,
     Rol: { IdRol: 0, NombreRol: '' }
   };
 

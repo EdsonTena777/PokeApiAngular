@@ -1,41 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
+<h1 class="titulo-usuarios">Usuarios</h1>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<button (click)="regresar()" class="btn-poke">Regresar</button>
 
-<body>
+<div class="usuarios-container">
+  @for (usuario of usuarios; track usuario.IdUsuario) {
 
+    <div class="usuario-card">
+      <div class="usuario-header">
+        <span>{{ usuario.UserName }}</span>
+        <span>#{{ usuario.IdUsuario }}</span>
+      </div>
 
-    <h1>Usuarios3</h1>
-    <button (click)="regresar()" class="btn-poke">Regresar</button>
+      <div class="usuario-body">
+        <p>
+          <strong>Correo:</strong>
+          {{ usuario.Correo }}
+        </p>
 
-    <div class="contenedor-cards">
-        @for (usuario of usuarios; track usuario.IdUsuario) {
+        <p>
+          <strong>Rol:</strong>
+          {{ usuario.Rol.NombreRol }}
+        </p>
+      </div>
 
-        <div class="contenedor-cards">
-            <div class="card" style="width: 18rem; ">
-                <div class="card-header">
-                    <span>{{ usuario.UserName }}</span>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Correo: {{ usuario.Correo }}</li>
-                    <li class="list-group-item">Rol: {{ usuario.Rol.NombreRol }}</li>
-
-                </ul>
-            </div>
-        </div>
-
-        }
+      <div class="usuario-footer">
+        <button class="btn-update">Actualizar</button>
+        <button class="btn-delete">Eliminar</button>
+      </div>
     </div>
 
-
-
-
-
-</body>
-
-</html>
+  }
+</div>

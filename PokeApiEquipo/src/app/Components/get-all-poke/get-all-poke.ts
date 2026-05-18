@@ -45,6 +45,7 @@ export class GetAllPoke {
 
   public textoBusqueda: string = '';
   public cargando: boolean = false;
+  public generacionSeleccionado: string = '';
 
   public busqueda: string = '';
   public tipoSeleccionados: string[] = [];
@@ -69,6 +70,18 @@ export class GetAllPoke {
     'steel',
     'water'
   ];
+
+  generaciones = [
+    'generation-i',
+    'generation-ii',
+    'generation-iii',
+    'generation-iv',
+    'generation-v',
+    'generation-vi',
+    'generation-vii',
+    'generation-viii',
+    'generation-ix'
+    ];
 
   private pokemonService = inject(PokemonService);
 
@@ -163,6 +176,9 @@ export class GetAllPoke {
               this.pokemones[index].descripcion = descEsp?.flavor_text
                 ?.replace(/\f/g, ' ')
                 ?.replace(/\n/g, ' ');
+
+              this.pokemones[index].generation= descData.generation.name;
+
               this.cdr.detectChanges();
             }
           });
@@ -227,8 +243,8 @@ export class GetAllPoke {
       const coincideBusqueda = pokemon.name.toLowerCase().includes(this.busqueda.toLowerCase());
       const coincideTipo = this.tipoSeleccionados.length === 0 ||
         this.tipoSeleccionados.every(tipoSeleccionado => pokemon.types.some(types => types.type.name === tipoSeleccionado));
-
-      return coincideBusqueda && coincideTipo;
+      const  coincideGeneracion = this.generacionSeleccionado==='' || pokemon.generation === this.generacionSeleccionado;
+      return coincideBusqueda && coincideTipo && coincideGeneracion;
     })
   }
 

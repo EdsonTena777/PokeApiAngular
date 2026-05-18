@@ -22,7 +22,7 @@ export class VerificarCuenta {
   }
 
   verificarCuenta() {
-    this.http.get(`http://localhost:8080/pokemon/verificar?token=${this.token}`)
+    this.http.get(`http://192.167.0.227:8080/pokemon/verificar?token=${this.token}`)
       .subscribe({
         next: (res: any) => {
           this.verificado = true;

@@ -74,9 +74,12 @@ export class GetAllPoke {
 
   ngOnInit(): void {
     const datosGuardados = this.pokemonService.getPokemones();
+    const favoritosGuardados = this.pokemonService.getFavoritos();
 
     if (datosGuardados.length > 0) {
-      this.pokemones = datosGuardados;
+
+      this.pokemonesFiltrados = [...datosGuardados];
+      this.pokemonesFavoritos = [...favoritosGuardados];
       console.log('Datos cargados desde cache', this.pokemones);
       this.estacargando = false;
       this.cdr.detectChanges();
@@ -123,6 +126,7 @@ export class GetAllPoke {
             this.pokemonesFavoritos = data.map((objeto: any) => ({
               idPokemon: objeto.idPokemon,
             }));
+            this.pokemonService.setFavoritos(this.pokemonesFavoritos);
             this.cdr.detectChanges();
           },
           error: (err) => {
@@ -179,9 +183,8 @@ export class GetAllPoke {
   }
 
   get pokemonesAMostrar() {
-    console.log('Pokemones en el get PokemonesAMostrar:', this.pokemonesFiltrados);
+    console.log('Pokemones en el get PokemonesAMostra:', this.pokemonesFiltrados);
     return this.pokemonesFiltrados.slice(this.offset, this.offset + this.limitfuera);
-    
   }
 
   siguientePagina() {

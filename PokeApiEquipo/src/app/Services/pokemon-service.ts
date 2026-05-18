@@ -16,9 +16,9 @@ export class PokemonService {
 
   private url = 'https://pokeapi.co/api/v2/pokemon/';
 
-  private urlServicio = 'http://192.167.0.98:8080/pokemon';
+  private urlServicio = 'http://192.167.0.227:8080/pokemon';
 
-  private urlLogin = 'http://192.167.0.98:8080/auth';
+  private urlLogin = 'http://192.167.0.227:8080/auth';
 
   private urlDesc = 'https://pokeapi.co/api/v2/pokemon-species';
 
@@ -29,6 +29,15 @@ export class PokemonService {
   constructor(private http: HttpClient) { }
 
   // Cache para almacenar los pokemones obtenidos SIN necesidad de volver a hacer la petición
+  private cacheFavoritos: Pokemon[] = [];
+
+  setFavoritos(favoritos: Pokemon[]) {
+    this.cacheFavoritos = favoritos;
+  }
+
+  getFavoritos() {
+    return this.cacheFavoritos;
+  }
   private cachePokemones: any[] = [];
 
   setPokemones(data: any[]) {

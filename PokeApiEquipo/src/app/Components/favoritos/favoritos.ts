@@ -5,6 +5,8 @@ import { TitleCasePipe, CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { Pokemon } from '../../Interfaces/pokemon-model';
 import { forkJoin } from 'rxjs';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-favoritos',
@@ -19,6 +21,8 @@ export class Favoritos implements OnInit {
   constructor(private cdr: ChangeDetectorRef) { }
   private pokemonService = inject(PokemonService);
   private router = inject(Router);
+  location = inject(Location);
+
 
   idUsuario: number = 0;
 
@@ -88,8 +92,8 @@ export class Favoritos implements OnInit {
     pokemon.flipped = !pokemon.flipped;
   }
 
-  reproducirSonido(pokemon: Pokemon){
-    if(!pokemon.sonido) return;
+  reproducirSonido(pokemon: Pokemon) {
+    if (!pokemon.sonido) return;
 
     const audio = new Audio(pokemon.sonido);
     audio.volume = 0.5;
@@ -97,24 +101,28 @@ export class Favoritos implements OnInit {
   }
 
   removeFavorito(event: Event, pokemon: Pokemon) {
-      console.log('Removiendo de favoritos:', pokemon);
-      this.pokemonService.removeFavorito(this.idUsuario, pokemon.idPokemon).subscribe({
-        next: (response) => {
-          console.log('Respuesta del servidor:', response);
-          this.pokemonesFavoritos = this.pokemonesFavoritos.filter(fav => fav.idPokemon !== pokemon.idPokemon);
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Pokemon removido de favoritos",
-            showConfirmButton: false,
-            timer: 1500
-          });
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error('Error al remover de favoritos:', err);
-          alert(`Error al remover ${pokemon.name} de favoritos.`);
-        }
-      });
-    }
+    console.log('Removiendo de favoritos:', pokemon);
+    this.pokemonService.removeFavorito(this.idUsuario, pokemon.idPokemon).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        this.pokemonesFavoritos = this.pokemonesFavoritos.filter(fav => fav.idPokemon !== pokemon.idPokemon);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Pokemon removido de favoritos",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al remover de favoritos:', err);
+        alert(`Error al remover ${pokemon.name} de favoritos.`);
+      }
+    });
+  }
+
+  regresar() {
+    this.location.back(); // Retrocede en el historial sin recargar
+  }
 }

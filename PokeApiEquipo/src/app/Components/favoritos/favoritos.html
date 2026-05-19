@@ -1,4 +1,7 @@
+        <button (click)="regresar()" class="btn-poke">Regresar</button>
+
 <div class="row g-3 justify-content-center row-favoritos">
+
     @for (pokemon of pokemonesFavoritos; track pokemon.idPokemon) {
     <div class="col-md-4 d-flex">
         <div class="carta-volteada" [class.flipped]="pokemon.flipped">
@@ -100,4 +103,5 @@
     } @empty {
     <h3>No tienes Pokémon favoritos todavía.</h3>
     }
+
 </div>

@@ -3,6 +3,7 @@ import { PokemonService } from '../../Services/pokemon-service';
 import { Usuario } from '../../Interfaces/usuario-model';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 declare var bootstrap: any;
 
 @Component({
@@ -58,28 +59,44 @@ export class GetAllUser {
     this.location.back(); // Retrocede en el historial sin recargar
   }
 
+
+
+
   deleteUser(id: number) {
-    this.pokemonService.deleteUser(id).subscribe({
-      next: () => {
-        console.log('Usuario eliminado con ID:', id);
+    Swal.fire({
+      title: "Seguro de eliminar este usuario?",
+      text: "No se podra revertir",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar!"
+    }).then((result) => {
+      if (result.isConfirmed) Swal.fire({
+        title: "Borrado con exito!",
+        text: "Your file has been deleted.",
+        icon: "success"
+      });
 
-        this.usuarios = this.usuarios.filter(usuario => usuario.IdUsuario !== id);
-
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error al eliminar el usuario:', error);
-      }
+      this.pokemonService.deleteUser(id).subscribe({
+        next: () => {
+          this.usuarios = this.usuarios.filter(usuario => usuario.IdUsuario !== id);
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Error al eliminar el usuario:', error);
+        }
+      });
     });
   }
 
-  updateUser(user: Usuario){
+  updateUser(user: Usuario) {
     console.log(user);
     this.pokemonService.updateUser(user).subscribe({
-      next: () =>{
+      next: () => {
         console.log("usuario actualizado con exito");
       },
-      error: (error) =>{
+      error: (error) => {
         console.log("hubo un error en la actualizacion");
       }
     })
@@ -89,7 +106,7 @@ export class GetAllUser {
   usuarioSeleccionado: any = null;
 
   abrirModal(usuario: any) {
-    this.usuarioSeleccionado = usuario; 
+    this.usuarioSeleccionado = usuario;
 
     const bootstrapModal = new bootstrap.Modal(this.modalElement.nativeElement);
     bootstrapModal.show();
